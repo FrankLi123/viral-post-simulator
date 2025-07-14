@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import AnalyticsModal from './AnalyticsModal';
 import TweetDetailModal from './TweetDetailModal';
 import { useNotifications } from './Layout';
+import { useUser } from '@/app/app/page';
 
 interface PostProps {
   content: string;
@@ -81,6 +82,7 @@ function AnimatedNumber({ value, className }: { value: number; className?: strin
 
 export default function Post({ content, timestamp }: PostProps) {
   const { incrementNotification } = useNotifications();
+  const userData = useUser();
   
   const [metrics, setMetrics] = useState({
     likes: 0,
@@ -332,8 +334,8 @@ export default function Post({ content, timestamp }: PostProps) {
           
           <div className="flex-1">
             <div className="flex items-center space-x-2">
-              <span className="font-bold">You</span>
-              <span className="text-[#71767b]">@yourhandle</span>
+              <span className="font-bold">{userData.name}</span>
+              <span className="text-[#71767b]">@{userData.handle}</span>
               <span className="text-[#71767b]">·</span>
               <span className="text-[#71767b]">{getTimestamp()}</span>
               <button className="ml-auto text-[#71767b] hover:text-white">

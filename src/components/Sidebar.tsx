@@ -11,6 +11,7 @@ import {
   MoreHorizontal,
   X
 } from 'lucide-react';
+import { useUser } from '@/app/app/page';
 
 interface SidebarProps {
   notificationCount?: number;
@@ -27,6 +28,8 @@ const navigationItems = [
 ];
 
 export default function Sidebar({ notificationCount = 0 }: SidebarProps) {
+  const userData = useUser();
+  
   return (
     <div className="p-4 h-full flex flex-col">
       {/* Logo */}
@@ -80,8 +83,8 @@ export default function Sidebar({ notificationCount = 0 }: SidebarProps) {
           <User size={20} />
         </div>
         <div className="hidden xl:block">
-          <div className="font-bold">You</div>
-          <div className="text-gray-500 text-sm">@yourhandle</div>
+          <div className="font-bold">{userData.name}</div>
+          <div className="text-gray-500 text-sm">@{userData.handle}</div>
         </div>
       </div>
     </div>

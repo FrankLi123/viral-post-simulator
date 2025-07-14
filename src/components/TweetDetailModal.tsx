@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Sidebar from './Sidebar';
 import RightSidebar from './RightSidebar';
 import { useNotifications } from './Layout';
+import { useUser } from '@/app/app/page';
 
 interface Comment {
   id: string;
@@ -73,6 +74,7 @@ export default function TweetDetailModal({
   comments 
 }: TweetDetailModalProps) {
   const { notificationCount } = useNotifications();
+  const userData = useUser();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -152,8 +154,8 @@ export default function TweetDetailModal({
                 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center space-x-2">
-                    <span className="font-bold text-white">You</span>
-                    <span className="text-[#71767b] text-sm">@yourhandle</span>
+                    <span className="font-bold text-white">{userData.name}</span>
+                    <span className="text-[#71767b] text-sm">@{userData.handle}</span>
                     <button className="ml-auto text-[#71767b] hover:text-white p-1.5 hover:bg-[#1a1a1a] rounded-full transition-colors">
                       <MoreHorizontal size={20} />
                     </button>

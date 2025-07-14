@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { X, BarChart3, Heart, Repeat2, MessageCircle, User } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useUser } from '@/app/app/page';
 
 interface AnalyticsModalProps {
   isOpen: boolean;
@@ -24,6 +25,7 @@ export default function AnalyticsModal({
   content, 
   timestamp 
 }: AnalyticsModalProps) {
+  const userData = useUser();
   const [impressions, setImpressions] = useState(0);
   const [engagements, setEngagements] = useState(0);
   const [profileVisits, setProfileVisits] = useState(0);
@@ -94,8 +96,8 @@ export default function AnalyticsModal({
                   </div>
                   <div>
                     <div className="flex items-center space-x-2">
-                      <span className="font-bold">You</span>
-                      <span className="text-[#71767b]">@yourhandle</span>
+                      <span className="font-bold">{userData.name}</span>
+                      <span className="text-[#71767b]">@{userData.handle}</span>
                       <span className="text-[#71767b]">·</span>
                       <span className="text-[#71767b]">{formatTime(timestamp)}</span>
                     </div>
