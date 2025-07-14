@@ -36,13 +36,13 @@ export default function Layout({ children }: LayoutProps) {
             <Sidebar notificationCount={notificationCount} />
           </div>
           
-          {/* Main Content */}
-          <div className="flex-1 ml-64 xl:ml-80 mr-0 xl:mr-80 border-x border-[#2f3336]">
+          {/* Main Content - Made wider */}
+          <div className="flex-1 ml-64 xl:ml-80 mr-0 xl:mr-72 border-x border-[#2f3336] max-w-[700px]">
             {children}
           </div>
           
           {/* Right Sidebar */}
-          <div className="w-80 fixed right-0 h-full hidden xl:block">
+          <div className="w-72 fixed right-0 h-full hidden xl:block">
             <RightSidebar />
           </div>
         </div>

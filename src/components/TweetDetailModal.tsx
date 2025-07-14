@@ -122,14 +122,14 @@ export default function TweetDetailModal({
 
   return (
     <div className="fixed inset-0 bg-black text-white z-50 overflow-hidden">
-      <div className="flex h-full w-full">
+      <div className="flex h-full w-full justify-center">
         {/* Left Sidebar */}
         <div className="w-[275px] flex-shrink-0">
           <Sidebar notificationCount={notificationCount} />
         </div>
 
-        {/* Main Content */}
-        <div className="flex-1 border-x border-[#2f3336] min-w-0">
+        {/* Main Content - Centered */}
+        <div className="w-[700px] border-x border-[#2f3336] flex-shrink-0">
           {/* Header */}
           <div className="sticky top-0 bg-black/95 backdrop-blur-xl border-b border-[#2f3336] p-4 flex items-center space-x-8 z-10">
             <button 
@@ -174,39 +174,31 @@ export default function TweetDetailModal({
               </div>
               
               {/* Engagement Metrics - Properly aligned like Twitter */}
-              {mounted && (
+              {mounted && (metrics.retweets > 0 || metrics.likes > 0 || metrics.comments > 0) && (
                 <div className="flex items-center space-x-6 py-3 border-b border-[#2f3336] text-[15px]">
-               
-
+                  {metrics.retweets > 0 && (
                     <div className="flex items-center space-x-1 hover:underline cursor-pointer">
-                    <MessageCircle size={18} />
-                      <span className="font-bold text-white">{formatNumber(metrics.comments)}</span>
-                      {/* <span className="text-[#71767b]">Replies</span> */}
-                     
-                    </div>
-
-                    <div className="flex items-center space-x-1 hover:underline cursor-pointer">
-                    <Repeat2 size={18} />
                       <span className="font-bold text-white">{formatNumber(metrics.retweets)}</span>
-                      {/* <span className="text-[#71767b]">Reposts</span> */}
-                    
-                    
+                      <span className="text-[#71767b]">Reposts</span>
                     </div>
-                  
-                
+                  )}
+                  {metrics.likes > 0 && (
                     <div className="flex items-center space-x-1 hover:underline cursor-pointer">
-                    <Heart size={18} />
                       <span className="font-bold text-white">{formatNumber(metrics.likes)}</span>
-                      {/* <span className="text-[#71767b]">Likes</span> */}
-
+                      <span className="text-[#71767b]">Likes</span>
                     </div>
-                  
-                  
+                  )}
+                  {metrics.comments > 0 && (
+                    <div className="flex items-center space-x-1 hover:underline cursor-pointer">
+                      <span className="font-bold text-white">{formatNumber(metrics.comments)}</span>
+                      <span className="text-[#71767b]">Replies</span>
+                    </div>
+                  )}
                 </div>
               )}
 
               {/* Action Buttons */}
-              {/* <div className="flex items-center justify-around py-3 border-b border-[#2f3336] max-w-md">
+              <div className="flex items-center justify-around py-3 border-b border-[#2f3336] max-w-md">
                 <button className="flex items-center justify-center w-9 h-9 rounded-full hover:bg-[#1d9bf0]/10 text-[#71767b] hover:text-[#1d9bf0] transition-all duration-200">
                   <MessageCircle size={18} />
                 </button>
@@ -219,7 +211,7 @@ export default function TweetDetailModal({
                 <button className="flex items-center justify-center w-9 h-9 rounded-full hover:bg-[#1d9bf0]/10 text-[#71767b] hover:text-[#1d9bf0] transition-all duration-200">
                   <Share size={18} />
                 </button>
-              </div> */}
+              </div>
             </div>
 
             {/* Comments */}
@@ -289,7 +281,7 @@ export default function TweetDetailModal({
         </div>
 
         {/* Right Sidebar */}
-        <div className="w-[350px] flex-shrink-0">
+        <div className="w-[288px] flex-shrink-0">
           <RightSidebar />
         </div>
       </div>

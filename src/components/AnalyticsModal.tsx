@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { X, BarChart3, Heart, Repeat2, MessageCircle } from 'lucide-react';
+import { X, BarChart3, Heart, Repeat2, MessageCircle, User } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface AnalyticsModalProps {
@@ -27,6 +27,7 @@ export default function AnalyticsModal({
   const [impressions, setImpressions] = useState(0);
   const [engagements, setEngagements] = useState(0);
   const [profileVisits, setProfileVisits] = useState(0);
+  const [detailExpands, setDetailExpands] = useState(0);
 
   useEffect(() => {
     if (isOpen) {
@@ -34,6 +35,7 @@ export default function AnalyticsModal({
       setImpressions(Math.floor(metrics.views * 1.2));
       setEngagements(metrics.likes + metrics.retweets + metrics.comments);
       setProfileVisits(Math.floor(metrics.views * 0.1));
+      setDetailExpands(Math.floor(metrics.views * 0.05));
     }
   }, [isOpen, metrics]);
 
@@ -41,6 +43,14 @@ export default function AnalyticsModal({
     if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
     if (num >= 1000) return `${(num / 1000).toFixed(1)}K`;
     return num.toString();
+  };
+
+  const formatTime = (date: Date) => {
+    return date.toLocaleString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    });
   };
 
   return (
@@ -52,7 +62,7 @@ export default function AnalyticsModal({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 z-50"
+            className="fixed inset-0 bg-black/60 z-50"
             onClick={onClose}
           />
           
@@ -78,21 +88,40 @@ export default function AnalyticsModal({
             <div className="flex-1 overflow-y-auto p-4">
               {/* Post Preview */}
               <div className="mb-6 p-4 border border-[#2f3336] rounded-xl">
-                <div className="flex items-center space-x-2 mb-2">
-                  <span className="font-bold">You</span>
-                  <span className="text-[#71767b]">@yourhandle</span>
-                  <span className="text-[#71767b]">·</span>
-                  <span className="text-[#71767b]">{Math.floor((Date.now() - timestamp.getTime()) / 60000)}m</span>
+                <div className="flex items-center space-x-3 mb-3">
+                  <div className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center flex-shrink-0">
+                    <User size={20} />
+                  </div>
+                  <div>
+                    <div className="flex items-center space-x-2">
+                      <span className="font-bold">You</span>
+                      <span className="text-[#71767b]">@yourhandle</span>
+                      <span className="text-[#71767b]">·</span>
+                      <span className="text-[#71767b]">{formatTime(timestamp)}</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="text-white mb-4">{content}</div>
                 
-                {/* Mini metrics */}
-                <div className="flex items-center space-x-6 text-[#71767b] text-sm">
-            
-                  <span> <Heart size={18} /> {formatNumber(metrics.likes)}</span>
-                  <span> <Repeat2 size={18} /> {formatNumber(metrics.retweets)}</span>
-                  <span>  <MessageCircle size={18} /> {formatNumber(metrics.comments)}</span>
-            
+                <div className="text-white mb-4 text-[15px] leading-5">{content}</div>
+                
+                {/* Tweet metrics bar */}
+                <div className="flex items-center justify-between max-w-md border-t border-[#2f3336] pt-3">
+                  <div className="flex items-center space-x-1">
+                    <MessageCircle size={16} className="text-[#71767b]" />
+                    <span className="text-[#71767b] text-sm">{formatNumber(metrics.comments)}</span>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <Repeat2 size={16} className="text-[#71767b]" />
+                    <span className="text-[#71767b] text-sm">{formatNumber(metrics.retweets)}</span>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <Heart size={16} className="text-[#71767b]" />
+                    <span className="text-[#71767b] text-sm">{formatNumber(metrics.likes)}</span>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <BarChart3 size={16} className="text-[#71767b]" />
+                    <span className="text-[#71767b] text-sm">{formatNumber(metrics.views)}</span>
+                  </div>
                 </div>
               </div>
               
@@ -119,7 +148,7 @@ export default function AnalyticsModal({
                     <span className="text-[#71767b] text-sm">Detail expands</span>
                     <div className="w-4 h-4 bg-[#71767b] rounded-full flex items-center justify-center text-black text-xs">?</div>
                   </div>
-                  <div className="text-3xl font-bold">{Math.floor(metrics.views * 0.05)}</div>
+                  <div className="text-3xl font-bold">{formatNumber(detailExpands)}</div>
                 </div>
                 
                 <div className="bg-[#16181c] border border-[#2f3336] rounded-xl p-4">
@@ -143,7 +172,7 @@ export default function AnalyticsModal({
             
             {/* Footer */}
             <div className="p-4 border-t border-[#2f3336] text-center">
-              <button className="bg-[#1d9bf0] hover:bg-[#1a8cd8] text-white font-bold py-2 px-6 rounded-full transition-colors">
+              <button className="bg-black hover:bg-[#1a1a1a] text-white font-bold py-2 px-6 rounded-full border border-[#2f3336] transition-colors">
                 Promote post
               </button>
             </div>
