@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { X, BarChart3, Heart, Repeat2, MessageCircle, User } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useUser } from '@/app/app/page';
+import { useUser } from '@/hooks/useUser';
 
 interface AnalyticsModalProps {
   isOpen: boolean;

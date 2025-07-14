@@ -39,12 +39,12 @@ export default function RightSidebar() {
         </button>
       </div>
       
-      {/* What's happening */}
+      {/* What&apos;s happening */}
       <div className="bg-[#16181c] border border-[#2f3336] rounded-2xl overflow-hidden mb-4">
         <div className="p-4 border-b border-[#2f3336]">
           <h2 className="text-xl font-bold flex items-center">
             <TrendingUp size={20} className="mr-2" />
-            What's happening
+            What&apos;s happening
           </h2>
         </div>
         {trendingTopics.map((trend, index) => (

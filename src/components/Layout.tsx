@@ -16,8 +16,8 @@ interface NotificationContextType {
 
 const NotificationContext = createContext<NotificationContextType>({
   notificationCount: 0,
-  incrementNotification: (count?: number) => {},
-  setNotificationCount: (count: number) => {}
+  incrementNotification: () => {},
+  setNotificationCount: () => {}
 });
 
 export const useNotifications = () => useContext(NotificationContext);

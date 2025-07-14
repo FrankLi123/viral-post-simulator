@@ -7,11 +7,10 @@ import {
   Mail, 
   Bookmark, 
   User, 
-  Settings,
   MoreHorizontal,
   TrendingUp
 } from 'lucide-react';
-import { useUser } from '@/app/app/page';
+import { useUser } from '@/hooks/useUser';
 
 interface SidebarProps {
   notificationCount?: number;

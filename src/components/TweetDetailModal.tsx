@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { ArrowLeft, Heart, MessageCircle, Repeat2, Share, MoreHorizontal, User } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Sidebar from './Sidebar';
 import RightSidebar from './RightSidebar';
 import { useNotifications } from './Layout';
-import { useUser } from '@/app/app/page';
+import { useUser } from '@/hooks/useUser';
 
 interface Comment {
   id: string;
@@ -87,23 +87,12 @@ export default function TweetDetailModal({
     return num.toString();
   };
 
-  const formatTime = (date: Date) => {
-    if (!mounted) return '0s';
-    const now = new Date();
-    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-    
-    if (diffInSeconds < 60) return `${diffInSeconds}s`;
-    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m`;
-    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h`;
-    return `${Math.floor(diffInSeconds / 86400)}d`;
-  };
-
   const getCommentTime = (commentTimestamp: Date) => {
     if (!mounted) return '0s';
     const now = new Date();
     const diffInSeconds = Math.floor((now.getTime() - commentTimestamp.getTime()) / 1000);
     
-    if (diffInSeconds < 60) return `${diffInSeconds}s`;
+    if (diffInSeconds < 60) return `${Math.max(0, diffInSeconds)}s`;
     if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m`;
     return `${Math.floor(diffInSeconds / 3600)}h`;
   };

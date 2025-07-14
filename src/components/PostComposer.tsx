@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Image, Smile, Calendar, MapPin, User } from 'lucide-react';
+import { Image as ImageIcon, Smile, Calendar, MapPin, User } from 'lucide-react';
 
 interface PostComposerProps {
   onPost: (content: string) => void;
@@ -43,7 +43,7 @@ export default function PostComposer({ onPost }: PostComposerProps) {
           <div className="flex items-center justify-between mt-4">
             <div className="flex items-center space-x-4">
               <button className="text-[#1d9bf0] hover:bg-[#1d9bf0]/10 p-2 rounded-full transition-colors">
-                <Image size={20} />
+                <ImageIcon size={20} />
               </button>
               <button className="text-[#1d9bf0] hover:bg-[#1d9bf0]/10 p-2 rounded-full transition-colors">
                 <Smile size={20} />

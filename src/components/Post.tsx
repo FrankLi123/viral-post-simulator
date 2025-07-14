@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Heart, MessageCircle, Repeat2, Share, BarChart3, User, MoreHorizontal } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import AnalyticsModal from './AnalyticsModal';
 import TweetDetailModal from './TweetDetailModal';
 import { useNotifications } from './Layout';
-import { useUser } from '@/app/app/page';
+import { useUser } from '@/hooks/useUser';
 
 interface PostProps {
   content: string;
@@ -110,7 +110,7 @@ export default function Post({ content, timestamp }: PostProps) {
       // Set notification count to total engagement
       setNotificationCount(totalEngagement);
     }
-  }, [metrics.likes, metrics.retweets, metrics.comments, mounted]);
+  }, [metrics.likes, metrics.retweets, metrics.comments, mounted, setNotificationCount]);
 
   // Safe timestamp calculation to prevent hydration issues
   const getTimestamp = () => {
@@ -124,7 +124,9 @@ export default function Post({ content, timestamp }: PostProps) {
   };
 
   // Function to update comment metrics over time
-  const updateCommentMetrics = () => {
+  const updateCommentMetrics = useCallback(() => {
+    if (!mounted) return;
+    
     setAllComments(prevComments => 
       prevComments.map(comment => {
         const timeSinceCreation = (Date.now() - comment.timestamp.getTime()) / 1000;
@@ -145,7 +147,7 @@ export default function Post({ content, timestamp }: PostProps) {
         };
       })
     );
-  };
+  }, [viralStage, mounted]);
 
   useEffect(() => {
     if (!mounted) return;
@@ -154,8 +156,9 @@ export default function Post({ content, timestamp }: PostProps) {
 
     // Stage 1: Initial engagement (0-10s) - Slow start
     intervals.push(setTimeout(() => {
-      if (hasReachedLimit) return;
+      if (hasReachedLimit || !mounted) return;
       const likesInterval = setInterval(() => {
+        if (!mounted) return;
         setMetrics(prev => {
           if (prev.views >= 1000000) {
             setHasReachedLimit(true);
@@ -173,8 +176,9 @@ export default function Post({ content, timestamp }: PostProps) {
 
     // Stage 2: Building momentum (10-30s) - Getting faster  
     intervals.push(setTimeout(() => {
-      if (hasReachedLimit) return;
+      if (hasReachedLimit || !mounted) return;
       const retweetInterval = setInterval(() => {
+        if (!mounted) return;
         setMetrics(prev => {
           if (prev.views >= 1000000) {
             setHasReachedLimit(true);
@@ -192,35 +196,35 @@ export default function Post({ content, timestamp }: PostProps) {
 
     // Stage 3: Comments start appearing (15s onwards) - More comments over time
     intervals.push(setTimeout(() => {
-      if (hasReachedLimit) return;
+      if (hasReachedLimit || !mounted) return;
       let commentIndex = 0;
       const commentInterval = setInterval(() => {
-        if (commentIndex < viralComments.length && !hasReachedLimit) {
-          const comment: Comment = {
-            ...viralComments[commentIndex],
-            id: (commentIndex + 1).toString(),
-            timestamp: new Date(timestamp.getTime() + (commentIndex + 1) * 3000 + 15000),
-            likes: 0, // Start from 0
-            retweets: 0, // Start from 0
-            replies: 0, // Start from 0
-          };
-          setAllComments(prev => [...prev, comment]);
-          setMetrics(prev => ({
-            ...prev,
-            comments: prev.comments + 1,
-          }));
-          commentIndex++;
-        }
+        if (!mounted || commentIndex >= viralComments.length || hasReachedLimit) return;
+        const comment: Comment = {
+          ...viralComments[commentIndex],
+          id: (commentIndex + 1).toString(),
+          timestamp: new Date(timestamp.getTime() + (commentIndex + 1) * 3000 + 15000),
+          likes: 0, // Start from 0
+          retweets: 0, // Start from 0
+          replies: 0, // Start from 0
+        };
+        setAllComments(prev => [...prev, comment]);
+        setMetrics(prev => ({
+          ...prev,
+          comments: prev.comments + 1,
+        }));
+        commentIndex++;
       }, 3000);
       intervals.push(commentInterval);
     }, 15000));
 
     // Stage 4: Viral explosion (30s) - Exponential growth
     intervals.push(setTimeout(() => {
-      if (hasReachedLimit) return;
+      if (hasReachedLimit || !mounted) return;
       setViralStage(1);
       setShowNotification(true);
       const explosionInterval = setInterval(() => {
+        if (!mounted) return;
         setMetrics(prev => {
           if (prev.views >= 1000000) {
             setHasReachedLimit(true);
@@ -248,10 +252,11 @@ export default function Post({ content, timestamp }: PostProps) {
 
     // Stage 5: Mega viral (60s) - Ultra exponential
     intervals.push(setTimeout(() => {
-      if (hasReachedLimit) return;
+      if (hasReachedLimit || !mounted) return;
       setViralStage(2);
       setShowNotification(true);
       const megaViralInterval = setInterval(() => {
+        if (!mounted) return;
         setMetrics(prev => {
           if (prev.views >= 1000000) {
             setHasReachedLimit(true);
@@ -279,8 +284,9 @@ export default function Post({ content, timestamp }: PostProps) {
 
     // Comment metrics growth interval - starts after first comments appear
     intervals.push(setTimeout(() => {
+      if (!mounted) return;
       const commentMetricsInterval = setInterval(() => {
-        if (!hasReachedLimit) {
+        if (!hasReachedLimit && mounted) {
           updateCommentMetrics();
         }
       }, 2000); // Update comment metrics every 2 seconds
@@ -290,7 +296,7 @@ export default function Post({ content, timestamp }: PostProps) {
     return () => {
       intervals.forEach(interval => clearInterval(interval));
     };
-  }, [mounted, hasReachedLimit, timestamp, viralStage]);
+  }, [mounted, hasReachedLimit, timestamp, viralStage, updateCommentMetrics]);
 
   const getViralMessage = () => {
     switch (viralStage) {
