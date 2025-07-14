@@ -176,28 +176,34 @@ export default function TweetDetailModal({
               {/* Engagement Metrics - Properly aligned like Twitter */}
               {mounted && (metrics.retweets > 0 || metrics.likes > 0 || metrics.comments > 0) && (
                 <div className="flex items-center space-x-6 py-3 border-b border-[#2f3336] text-[15px]">
-                  {metrics.retweets > 0 && (
-                    <div className="flex items-center space-x-1 hover:underline cursor-pointer">
-                      <span className="font-bold text-white">{formatNumber(metrics.retweets)}</span>
-                      <span className="text-[#71767b]">Reposts</span>
-                    </div>
-                  )}
-                  {metrics.likes > 0 && (
-                    <div className="flex items-center space-x-1 hover:underline cursor-pointer">
-                      <span className="font-bold text-white">{formatNumber(metrics.likes)}</span>
-                      <span className="text-[#71767b]">Likes</span>
-                    </div>
-                  )}
-                  {metrics.comments > 0 && (
-                    <div className="flex items-center space-x-1 hover:underline cursor-pointer">
+               
+
+               <div className="flex items-center space-x-1 hover:underline cursor-pointer">
+                    <MessageCircle size={18} />
                       <span className="font-bold text-white">{formatNumber(metrics.comments)}</span>
-                      <span className="text-[#71767b]">Replies</span>
+                    
+                      {/* <span className="text-[#71767b]">Replies</span> */}
                     </div>
-                  )}
+                    
+                    <div className="flex items-center space-x-1 hover:underline cursor-pointer">
+                    <Repeat2 size={18} />
+                      <span className="font-bold text-white">{formatNumber(metrics.retweets)}</span>
+                      {/* <span className="text-[#71767b]">Reposts</span> */}
+                      
+                    </div>
+                 
+                  
+                    <div className="flex items-center space-x-1 hover:underline cursor-pointer">
+                    <Heart size={18} /> 
+                      <span className="font-bold text-white">{formatNumber(metrics.likes)}</span>
+                      {/* <span className="text-[#71767b]">Likes</span> */}
+                    </div>
+              
+                
                 </div>
               )}
 
-              {/* Action Buttons */}
+              {/* Action Buttons
               <div className="flex items-center justify-around py-3 border-b border-[#2f3336] max-w-md">
                 <button className="flex items-center justify-center w-9 h-9 rounded-full hover:bg-[#1d9bf0]/10 text-[#71767b] hover:text-[#1d9bf0] transition-all duration-200">
                   <MessageCircle size={18} />
@@ -211,7 +217,7 @@ export default function TweetDetailModal({
                 <button className="flex items-center justify-center w-9 h-9 rounded-full hover:bg-[#1d9bf0]/10 text-[#71767b] hover:text-[#1d9bf0] transition-all duration-200">
                   <Share size={18} />
                 </button>
-              </div>
+              </div> */}
             </div>
 
             {/* Comments */}
