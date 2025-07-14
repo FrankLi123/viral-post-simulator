@@ -55,7 +55,7 @@ export default function Sidebar({ notificationCount = 0 }: SidebarProps) {
                 {/* Notification Badge */}
                 {showNotificationBadge && (
                   <div className="absolute -top-1 -right-1 bg-[#1d9bf0] text-white text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1">
-                    {notificationCount > 99 ? '99+' : notificationCount}
+                    {notificationCount > 999 ? '999+' : notificationCount}
                   </div>
                 )}
               </div>

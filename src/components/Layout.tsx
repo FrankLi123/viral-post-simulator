@@ -10,12 +10,14 @@ interface LayoutProps {
 
 interface NotificationContextType {
   notificationCount: number;
-  incrementNotification: () => void;
+  incrementNotification: (count?: number) => void;
+  setNotificationCount: (count: number) => void;
 }
 
 const NotificationContext = createContext<NotificationContextType>({
   notificationCount: 0,
-  incrementNotification: () => {}
+  incrementNotification: (count?: number) => {},
+  setNotificationCount: (count: number) => {}
 });
 
 export const useNotifications = () => useContext(NotificationContext);
@@ -23,12 +25,16 @@ export const useNotifications = () => useContext(NotificationContext);
 export default function Layout({ children }: LayoutProps) {
   const [notificationCount, setNotificationCount] = useState(0);
 
-  const incrementNotification = () => {
-    setNotificationCount(prev => prev + 1);
+  const incrementNotification = (count: number = 1) => {
+    setNotificationCount(prev => Math.min(prev + count, 9999)); // Cap at 9999 to avoid overflow
+  };
+
+  const setNotificationCountDirect = (count: number) => {
+    setNotificationCount(Math.min(count, 9999)); // Cap at 9999 to avoid overflow
   };
 
   return (
-    <NotificationContext.Provider value={{ notificationCount, incrementNotification }}>
+    <NotificationContext.Provider value={{ notificationCount, incrementNotification, setNotificationCount: setNotificationCountDirect }}>
       <div className="min-h-screen bg-black text-white">
         <div className="max-w-screen-xl mx-auto flex">
           {/* Left Sidebar */}

@@ -36,14 +36,14 @@ const viralComments: Omit<Comment, 'id' | 'timestamp' | 'likes' | 'retweets' | '
   { author: 'CEO Daily', handle: '@ceodaily', content: 'Featured this in our newsletter! 📧', verified: true, baseLikes: 156, baseRetweets: 67, baseReplies: 12 },
   { author: 'Trend Spotter', handle: '@trendspotter', content: 'Called it! This is going viral 📈', verified: false, baseLikes: 78, baseRetweets: 29, baseReplies: 5 },
   { author: 'Product Hunt', handle: '@producthunt', content: 'This needs to be on Product Hunt! 🚀', verified: true, baseLikes: 234, baseRetweets: 89, baseReplies: 18 },
-  { author: 'Y Combinator', handle: '@ycombinator', content: 'Solid execution. Would love to see more.', verified: true, baseLikes: 312, baseRetweets: 124, baseReplies: 23 },
+  { author: 'Unicorn Ventures', handle: '@unicornvc', content: 'Solid execution. Would love to see more.', verified: true, baseLikes: 312, baseRetweets: 124, baseReplies: 23 },
   { author: 'TechCrunch', handle: '@techcrunch', content: 'Covering this in our next article! 📰', verified: true, baseLikes: 445, baseRetweets: 189, baseReplies: 34 },
-  { author: 'Elon Musk', handle: '@elonmusk', content: 'Interesting 🤔', verified: true, baseLikes: 2847, baseRetweets: 1234, baseReplies: 567 },
-  { author: 'OpenAI', handle: '@openai', content: 'Love seeing innovative applications! 🤖', verified: true, baseLikes: 1567, baseRetweets: 678, baseReplies: 123 },
-  { author: 'Andreessen Horowitz', handle: '@a16z', content: 'This is the future we\'re investing in.', verified: true, baseLikes: 892, baseRetweets: 445, baseReplies: 78 },
+  { author: 'Tech Visionary', handle: '@techvisionary', content: 'Interesting 🤔', verified: true, baseLikes: 2847, baseRetweets: 1234, baseReplies: 567 },
+  { author: 'AI Ventures', handle: '@aiventures', content: 'Love seeing innovative applications! 🤖', verified: true, baseLikes: 1567, baseRetweets: 678, baseReplies: 123 },
+  { author: 'Alpha Capital', handle: '@alphacap', content: 'This is the future we\'re investing in.', verified: true, baseLikes: 892, baseRetweets: 445, baseReplies: 78 },
   { author: 'VentureBeat', handle: '@venturebeat', content: 'Breaking: This post just went mega viral! 📊', verified: true, baseLikes: 678, baseRetweets: 267, baseReplies: 45 },
-  { author: 'Sequoia Capital', handle: '@sequoiacap', content: 'Impressive growth trajectory 📈', verified: true, baseLikes: 534, baseRetweets: 198, baseReplies: 29 },
-  { author: 'Marc Benioff', handle: '@benioff', content: 'This is how innovation happens! 💡', verified: true, baseLikes: 743, baseRetweets: 321, baseReplies: 67 },
+  { author: 'Growth Capital', handle: '@growthcapital', content: 'Impressive growth trajectory 📈', verified: true, baseLikes: 534, baseRetweets: 198, baseReplies: 29 },
+  { author: 'Innovation CEO', handle: '@innovationceo', content: 'This is how innovation happens! 💡', verified: true, baseLikes: 743, baseRetweets: 321, baseReplies: 67 },
 ];
 
 // Simple Animated Number Component with hydration fix
@@ -81,7 +81,7 @@ function AnimatedNumber({ value, className }: { value: number; className?: strin
 }
 
 export default function Post({ content, timestamp }: PostProps) {
-  const { incrementNotification } = useNotifications();
+  const { setNotificationCount } = useNotifications();
   const userData = useUser();
   
   const [metrics, setMetrics] = useState({
@@ -102,6 +102,15 @@ export default function Post({ content, timestamp }: PostProps) {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Update notification count to reflect total engagement (likes + reposts + comments)
+  useEffect(() => {
+    if (mounted) {
+      const totalEngagement = metrics.likes + metrics.retweets + metrics.comments;
+      // Set notification count to total engagement
+      setNotificationCount(totalEngagement);
+    }
+  }, [metrics.likes, metrics.retweets, metrics.comments, mounted]);
 
   // Safe timestamp calculation to prevent hydration issues
   const getTimestamp = () => {
@@ -162,7 +171,7 @@ export default function Post({ content, timestamp }: PostProps) {
       intervals.push(likesInterval);
     }, 1000));
 
-    // Stage 2: Building momentum (10-30s) - Getting faster
+    // Stage 2: Building momentum (10-30s) - Getting faster  
     intervals.push(setTimeout(() => {
       if (hasReachedLimit) return;
       const retweetInterval = setInterval(() => {
@@ -173,11 +182,11 @@ export default function Post({ content, timestamp }: PostProps) {
           }
           return {
             ...prev,
-            retweets: prev.retweets + Math.floor(Math.random() * 8) + 2,
+            retweets: prev.retweets + Math.floor(Math.random() * 4) + 1, // Slower than likes but faster than comments
             views: prev.views + Math.floor(Math.random() * 100) + 50,
           };
         });
-      }, 600);
+      }, 1500); // Slower than likes (800ms) but faster than comments (3000ms)
       intervals.push(retweetInterval);
     }, 10000));
 
@@ -211,21 +220,25 @@ export default function Post({ content, timestamp }: PostProps) {
       if (hasReachedLimit) return;
       setViralStage(1);
       setShowNotification(true);
-      incrementNotification(); // Add notification for going viral
       const explosionInterval = setInterval(() => {
         setMetrics(prev => {
           if (prev.views >= 1000000) {
             setHasReachedLimit(true);
             setViralStage(3);
             setShowNotification(true);
-            incrementNotification(); // Add notification for 1M views milestone
             return { ...prev, views: 1000000 };
           }
+          const likesIncrease = Math.floor(Math.random() * 50) + 25;
+          const retweetsIncrease = Math.floor(Math.random() * 12) + 5; // Slower retweet growth
+          const newLikes = prev.likes + likesIncrease;
+          const newRetweets = prev.retweets + retweetsIncrease;
+          const newViews = prev.views + Math.floor(Math.random() * 1000) + 500;
+          
           return {
             ...prev,
-            likes: prev.likes + Math.floor(Math.random() * 50) + 25,
-            retweets: prev.retweets + Math.floor(Math.random() * 25) + 10,
-            views: prev.views + Math.floor(Math.random() * 1000) + 500,
+            likes: newLikes,
+            retweets: newRetweets,
+            views: newViews,
           };
         });
         updateCommentMetrics(); // Update comment metrics during viral stages
@@ -238,21 +251,25 @@ export default function Post({ content, timestamp }: PostProps) {
       if (hasReachedLimit) return;
       setViralStage(2);
       setShowNotification(true);
-      incrementNotification(); // Add notification for trending
       const megaViralInterval = setInterval(() => {
         setMetrics(prev => {
           if (prev.views >= 1000000) {
             setHasReachedLimit(true);
             setViralStage(3);
             setShowNotification(true);
-            incrementNotification(); // Add notification for 1M views milestone
             return { ...prev, views: 1000000 };
           }
+          const likesIncrease = Math.floor(Math.random() * 100) + 50;
+          const retweetsIncrease = Math.floor(Math.random() * 25) + 12; // Slower retweet growth even in mega viral
+          const newLikes = prev.likes + likesIncrease;
+          const newRetweets = prev.retweets + retweetsIncrease;
+          const newViews = prev.views + Math.floor(Math.random() * 5000) + 2000;
+          
           return {
             ...prev,
-            likes: prev.likes + Math.floor(Math.random() * 100) + 50,
-            retweets: prev.retweets + Math.floor(Math.random() * 50) + 25,
-            views: prev.views + Math.floor(Math.random() * 5000) + 2000,
+            likes: newLikes,
+            retweets: newRetweets,
+            views: newViews,
           };
         });
         updateCommentMetrics(); // Update comment metrics during viral stages
