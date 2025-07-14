@@ -9,7 +9,7 @@ import {
   User, 
   Settings,
   MoreHorizontal,
-  X
+  TrendingUp
 } from 'lucide-react';
 import { useUser } from '@/app/app/page';
 
@@ -34,7 +34,7 @@ export default function Sidebar({ notificationCount = 0 }: SidebarProps) {
     <div className="p-4 h-full flex flex-col">
       {/* Logo */}
       <div className="mb-8 p-3">
-        <X size={32} className="text-white" />
+        <TrendingUp size={32} className="text-[#1da1f2]" />
       </div>
       
       {/* Navigation */}

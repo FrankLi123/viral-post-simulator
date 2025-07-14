@@ -5,8 +5,8 @@
   --foreground: #ffffff;
   --border: #2f3336;
   --muted: #71767b;
-  --accent: #1d9bf0;
-  --accent-hover: #1a8cd8;
+  --accent: #1da1f2;  /* Slightly different blue from Twitter's #1d9bf0 */
+  --accent-hover: #1991e6;
 }
 
 @theme inline {

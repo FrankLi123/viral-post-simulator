@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { X, Sparkles, TrendingUp, Heart, MessageCircle } from 'lucide-react';
+import { Sparkles, TrendingUp, Heart, MessageCircle, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface UserData {
@@ -48,8 +48,9 @@ export default function LandingPage() {
           transition={{ duration: 0.6 }}
         >
           <div className="flex justify-center mb-4">
-            <div className="p-4 bg-[#1d9bf0] rounded-full">
-              <X size={32} className="text-white" />
+            <div className="p-4 bg-[#1da1f2] rounded-full relative">
+              <TrendingUp size={32} className="text-white" />
+              <Zap size={14} className="absolute -top-1 -right-1 text-[#ffd700]" />
             </div>
           </div>
           <h1 className="text-3xl font-bold mb-2">Viral Post Simulator</h1>
@@ -57,36 +58,36 @@ export default function LandingPage() {
           <p className="text-[#71767b] text-sm mt-2">Safe, fun, and addictive ✨</p>
         </motion.div>
 
-        {/* Features Preview */}
-        <motion.div 
-          className="grid grid-cols-2 gap-4 mb-8"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          <div className="bg-[#16181c] border border-[#2f3336] rounded-xl p-4 text-center">
-            <TrendingUp className="text-[#1d9bf0] mx-auto mb-2" size={24} />
-            <div className="text-sm font-bold">1M+ Views</div>
-            <div className="text-xs text-[#71767b]">Viral simulation</div>
-          </div>
-          <div className="bg-[#16181c] border border-[#2f3336] rounded-xl p-4 text-center">
-            <Heart className="text-[#f91880] mx-auto mb-2" size={24} />
-            <div className="text-sm font-bold">Real Metrics</div>
-            <div className="text-xs text-[#71767b]">Authentic growth</div>
-          </div>
-          <div className="bg-[#16181c] border border-[#2f3336] rounded-xl p-4 text-center">
-            <MessageCircle className="text-[#1d9bf0] mx-auto mb-2" size={24} />
-            <div className="text-sm font-bold">Viral Comments</div>
-            <div className="text-xs text-[#71767b]">From People</div>
-          </div>
-          <div className="bg-[#16181c] border border-[#2f3336] rounded-xl p-4 text-center">
-            <Sparkles className="text-[#ffd700] mx-auto mb-2" size={24} />
-            <div className="text-sm font-bold">Notifications</div>
-            <div className="text-xs text-[#71767b]">Feel the rush</div>
-          </div>
-        </motion.div>
+                  {/* Features Preview */}
+          <motion.div 
+            className="grid grid-cols-2 gap-4 mb-8"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <div className="bg-[#16181c] border border-[#2f3336] rounded-xl p-4 text-center">
+              <TrendingUp className="text-[#1d9bf0] mx-auto mb-2" size={24} />
+              <div className="text-sm font-bold">1M+ Views</div>
+              <div className="text-xs text-[#71767b]">Viral simulation</div>
+            </div>
+            <div className="bg-[#16181c] border border-[#2f3336] rounded-xl p-4 text-center">
+              <Heart className="text-[#f91880] mx-auto mb-2" size={24} />
+              <div className="text-sm font-bold">Real Metrics</div>
+              <div className="text-xs text-[#71767b]">Authentic growth</div>
+            </div>
+            <div className="bg-[#16181c] border border-[#2f3336] rounded-xl p-4 text-center">
+              <MessageCircle className="text-[#1d9bf0] mx-auto mb-2" size={24} />
+              <div className="text-sm font-bold">Viral Comments</div>
+              <div className="text-xs text-[#71767b]">From People</div>
+            </div>
+            <div className="bg-[#16181c] border border-[#2f3336] rounded-xl p-4 text-center">
+              <Sparkles className="text-[#ffd700] mx-auto mb-2" size={24} />
+              <div className="text-sm font-bold">Notifications</div>
+              <div className="text-xs text-[#71767b]">Feel the rush</div>
+            </div>
+          </motion.div>
 
-        {/* Input Form */}
+          {/* Input Form */}
         <motion.form 
           onSubmit={handleSubmit}
           className="space-y-4"
@@ -142,6 +143,20 @@ export default function LandingPage() {
             )}
           </motion.button>
         </motion.form>
+
+        {/* Legal Disclaimer */}
+        <motion.div 
+          className="mt-8 p-4 bg-gray-900/50 rounded-lg border border-gray-800"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.8 }}
+        >
+          <p className="text-xs text-gray-400 text-center">
+            <strong>Disclaimer:</strong> This is a parody and simulation app for entertainment purposes only. 
+            Not affiliated with X Corp, Twitter, or any social media platform. All simulated content and metrics are fake. 
+            No real social media accounts are created or used.
+          </p>
+        </motion.div>
 
         {/* Preview */}
         {userData.name && userData.handle && (
