@@ -66,7 +66,9 @@ This project demonstrates:
 
 ## 📋 License
 
-This project is for educational and entertainment purposes. Please ensure compliance with all applicable laws and platform terms of service if you modify or redistribute this code.
+MIT License - see the [LICENSE](LICENSE) file for details.
+
+This project is for educational and entertainment purposes only. Please ensure compliance with all applicable laws and platform terms of service if you modify or redistribute this code.
 
 ---
 
