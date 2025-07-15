@@ -93,6 +93,7 @@ export default function Post({ content, timestamp }: PostProps) {
   
   const [allComments, setAllComments] = useState<Comment[]>([]);
   const [showNotification, setShowNotification] = useState(false);
+  const [currentNotificationStage, setCurrentNotificationStage] = useState(0);
   const [showAnalytics, setShowAnalytics] = useState(false);
   const [showTweetDetail, setShowTweetDetail] = useState(false);
   const [viralStage, setViralStage] = useState(0);
@@ -122,6 +123,19 @@ export default function Post({ content, timestamp }: PostProps) {
     if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h`;
     return `${Math.floor(diffInSeconds / 86400)}d`;
   };
+
+  // Function to show notification once and move to next stage
+  const showNextNotification = useCallback((stage: number) => {
+    if (!mounted) return; // Only check if mounted, remove time limit
+    
+    setCurrentNotificationStage(stage);
+    setShowNotification(true);
+    
+    // Hide notification after 3 seconds and don't show again
+    setTimeout(() => {
+      setShowNotification(false);
+    }, 3000);
+  }, [mounted]);
 
   // Function to update comment metrics over time
   const updateCommentMetrics = useCallback(() => {
@@ -187,7 +201,7 @@ export default function Post({ content, timestamp }: PostProps) {
           return {
             ...prev,
             likes: prev.likes + Math.floor(Math.random() * 5) + 1,
-            retweets: prev.retweets + Math.floor(Math.random() * 4) + 1,
+            retweets: prev.retweets + (Math.random() < 0.3 ? 1 : 0), // Only 30% chance of getting 1 retweet
             views: prev.views + Math.floor(Math.random() * 100) + 50,
           };
         });
@@ -222,7 +236,7 @@ export default function Post({ content, timestamp }: PostProps) {
     timeouts.push(setTimeout(() => {
       if (hasReachedLimit || !mounted) return;
       setViralStage(1);
-      setShowNotification(true);
+      showNextNotification(1);
       startNewInterval(() => {
         if (!mounted || hasReachedLimit) return;
         setMetrics(prev => {
@@ -247,7 +261,7 @@ export default function Post({ content, timestamp }: PostProps) {
     timeouts.push(setTimeout(() => {
       if (hasReachedLimit || !mounted) return;
       setViralStage(2);
-      setShowNotification(true);
+      showNextNotification(2);
       startNewInterval(() => {
         if (!mounted || hasReachedLimit) return;
         setMetrics(prev => {
@@ -272,7 +286,7 @@ export default function Post({ content, timestamp }: PostProps) {
     timeouts.push(setTimeout(() => {
       if (hasReachedLimit || !mounted) return;
       setViralStage(3);
-      setShowNotification(true);
+      showNextNotification(3);
       startNewInterval(() => {
         if (!mounted || hasReachedLimit) return;
         setMetrics(prev => {
@@ -293,11 +307,11 @@ export default function Post({ content, timestamp }: PostProps) {
       }, 60); // Ultra fast: 60ms
     }, 90000));
 
-    // Stage 7: MEGA VIRAL (120s) - Internet Breaker!
+    // Stage 7: MEGA VIRAL (2.5 min) - Internet Breaker!
     timeouts.push(setTimeout(() => {
       if (hasReachedLimit || !mounted) return;
       setViralStage(4);
-      setShowNotification(true);
+      showNextNotification(4);
       startNewInterval(() => {
         if (!mounted || hasReachedLimit) return;
         setMetrics(prev => {
@@ -316,13 +330,13 @@ export default function Post({ content, timestamp }: PostProps) {
         });
         updateCommentMetrics();
       }, 40); // Insane speed: 40ms
-    }, 120000));
+    }, 150000)); // 2.5 minutes
 
-    // Stage 8: LEGENDARY (150s) - Global Phenomenon!
+    // Stage 8: LEGENDARY (3 min) - Global Phenomenon!
     timeouts.push(setTimeout(() => {
       if (hasReachedLimit || !mounted) return;
       setViralStage(5);
-      setShowNotification(true);
+      showNextNotification(5);
       startNewInterval(() => {
         if (!mounted || hasReachedLimit) return;
         setMetrics(prev => {
@@ -341,13 +355,13 @@ export default function Post({ content, timestamp }: PostProps) {
         });
         updateCommentMetrics();
       }, 30); // Legendary speed: 30ms
-    }, 150000));
+    }, 180000)); // 3 minutes
 
-    // Stage 9: ULTIMATE (180s) - Making History!
+    // Stage 9: ULTIMATE (4 min) - Making History!
     timeouts.push(setTimeout(() => {
       if (hasReachedLimit || !mounted) return;
       setViralStage(6);
-      setShowNotification(true);
+      showNextNotification(6);
       startNewInterval(() => {
         if (!mounted || hasReachedLimit) return;
         setMetrics(prev => {
@@ -366,17 +380,17 @@ export default function Post({ content, timestamp }: PostProps) {
         });
         updateCommentMetrics();
       }, 20); // Ultimate speed: 20ms
-    }, 180000));
+    }, 240000)); // 4 minutes
 
-    // Stage 10: WORLD RECORD (210s) - Biggest Viral Post Ever!
+    // Stage 10: WORLD RECORD (5 min) - Biggest Viral Post Ever!
     timeouts.push(setTimeout(() => {
       if (hasReachedLimit || !mounted) return;
       setViralStage(7);
-      setShowNotification(true);
+      showNextNotification(7);
       startNewInterval(() => {
         if (!mounted || hasReachedLimit) return;
         setMetrics(prev => {
-          if (prev.views >= 10000000) { // 10M limit
+          if (prev.views >= 2000000) { // 2M limit - STOP HERE!
             setHasReachedLimit(true);
             return prev;
           }
@@ -395,7 +409,7 @@ export default function Post({ content, timestamp }: PostProps) {
         });
         updateCommentMetrics();
       }, 15); // World record speed: 15ms
-    }, 210000));
+    }, 300000)); // 5 minutes
 
     // Comment metrics growth interval - independent of main growth
     timeouts.push(setTimeout(() => {
@@ -413,10 +427,10 @@ export default function Post({ content, timestamp }: PostProps) {
       }
       timeouts.forEach(timeout => clearTimeout(timeout));
     };
-  }, [mounted, hasReachedLimit, timestamp, viralStage, updateCommentMetrics]);
+  }, [mounted, hasReachedLimit, timestamp, viralStage, updateCommentMetrics, showNextNotification]);
 
   const getViralMessage = () => {
-    switch (viralStage) {
+    switch (currentNotificationStage) {
       case 1:
         return "🔥 Your post is going viral!";
       case 2:
@@ -461,13 +475,10 @@ export default function Post({ content, timestamp }: PostProps) {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.8, y: -20 }}
               className={`mb-4 p-3 rounded-lg text-center font-bold ${
-                viralStage === 3 
+                currentNotificationStage >= 5
                   ? 'bg-gradient-to-r from-yellow-500 to-orange-500' 
                   : 'bg-gradient-to-r from-[#1d9bf0] to-[#7c3aed]'
               }`}
-              onAnimationComplete={() => {
-                setTimeout(() => setShowNotification(false), viralStage === 3 ? 5000 : 3000);
-              }}
             >
               {getViralMessage()}
             </motion.div>
