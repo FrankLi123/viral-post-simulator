@@ -46,7 +46,7 @@ const viralComments: Omit<Comment, 'id' | 'timestamp' | 'likes' | 'retweets' | '
   { author: 'Innovation CEO', handle: '@innovationceo', content: 'This is how innovation happens! 💡', verified: true, baseLikes: 743, baseRetweets: 321, baseReplies: 67 },
 ];
 
-// Simple Animated Number Component with hydration fix
+// Rolling/Odometer Animated Number Component with hydration fix
 function AnimatedNumber({ value, className }: { value: number; className?: string }) {
   const [displayValue, setDisplayValue] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -60,8 +60,30 @@ function AnimatedNumber({ value, className }: { value: number; className?: strin
     if (!mounted) return;
     if (displayValue !== value) {
       setIsAnimating(true);
-      setDisplayValue(value);
-      setTimeout(() => setIsAnimating(false), 300);
+      
+      // Rolling animation - increment gradually to the target value
+      const startValue = displayValue;
+      const endValue = value;
+      const duration = 800; // Animation duration in ms
+      const steps = Math.min(20, Math.abs(endValue - startValue)); // Max 20 steps for smooth animation
+      const increment = (endValue - startValue) / steps;
+      const stepDuration = duration / steps;
+      
+      let currentStep = 0;
+      const timer = setInterval(() => {
+        currentStep++;
+        const newValue = Math.round(startValue + (increment * currentStep));
+        
+        if (currentStep >= steps) {
+          setDisplayValue(endValue);
+          setIsAnimating(false);
+          clearInterval(timer);
+        } else {
+          setDisplayValue(newValue);
+        }
+      }, stepDuration);
+      
+      return () => clearInterval(timer);
     }
   }, [value, displayValue, mounted]);
 
@@ -74,9 +96,11 @@ function AnimatedNumber({ value, className }: { value: number; className?: strin
   if (!mounted) return <span className={className}>0</span>;
 
   return (
-    <span className={`${className} ${isAnimating ? 'text-[#1d9bf0]' : ''} transition-colors duration-300`}>
-      {formatNumber(displayValue)}
-    </span>
+    <div className="overflow-hidden">
+      <span className={`${className} ${isAnimating ? 'text-[#1d9bf0]' : ''} transition-colors duration-300 inline-block transform ${isAnimating ? 'animate-pulse' : ''}`}>
+        {formatNumber(displayValue)}
+      </span>
+    </div>
   );
 }
 

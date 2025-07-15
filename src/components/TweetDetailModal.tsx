@@ -164,7 +164,7 @@ export default function TweetDetailModal({
                 {formatFullTime(timestamp)} · <span className="font-bold text-white">{mounted ? formatNumber(metrics.views) : '0'}</span> Views
               </div>
               
-              {/* Engagement Metrics - Properly aligned like Twitter */}
+              {/* Engagement Metrics - Properly aligned like Posts */}
               {mounted && (metrics.retweets > 0 || metrics.likes > 0 || metrics.comments > 0) && (
                 <div className="flex items-center space-x-6 py-3 border-b border-[#2f3336] text-[15px]">
                

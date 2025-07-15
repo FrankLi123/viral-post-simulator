@@ -19,7 +19,7 @@ interface UserData {
   handle: string;
 }
 
-function TwitterAppContent() {
+function PostAppContent() {
   const [posts, setPosts] = useState<PostData[]>([]);
   const [userData, setUserData] = useState<UserData>({ name: 'You', handle: 'yourhandle' });
   const searchParams = useSearchParams();
@@ -107,10 +107,10 @@ function TwitterAppContent() {
   );
 }
 
-export default function TwitterApp() {
+export default function PostApp() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <TwitterAppContent />
+      <PostAppContent />
     </Suspense>
   );
 } 

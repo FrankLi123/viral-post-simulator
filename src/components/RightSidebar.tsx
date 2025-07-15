@@ -28,7 +28,7 @@ export default function RightSidebar() {
         />
       </div>
       
-      {/* Subscribe Premium */}
+      {/* Subscribe Premium
       <div className="bg-[#16181c] border border-[#2f3336] rounded-2xl p-4 mb-4">
         <h2 className="text-xl font-bold mb-2">Subscribe to Premium+</h2>
         <p className="text-[#71767b] text-sm mb-3">
@@ -37,7 +37,7 @@ export default function RightSidebar() {
         <button className="bg-[#1d9bf0] hover:bg-[#1a8cd8] text-white font-bold py-2 px-6 rounded-full transition-colors">
           Subscribe
         </button>
-      </div>
+      </div> */}
       
       {/* What&apos;s happening */}
       <div className="bg-[#16181c] border border-[#2f3336] rounded-2xl overflow-hidden mb-4">
