@@ -219,7 +219,7 @@ export default function Post({ content, timestamp }: PostProps) {
         if (!mounted) return;
         setMetrics(prev => {
           const likesIncrease = Math.floor(Math.random() * 50) + 25;
-          const retweetsIncrease = Math.floor(Math.random() * 12) + 5; // Slower retweet growth
+          const retweetsIncrease = Math.floor(Math.random() * 12) + 2; // Slower retweet growth
           const newLikes = prev.likes + likesIncrease;
           const newRetweets = prev.retweets + retweetsIncrease;
           const newViews = prev.views + Math.floor(Math.random() * 1000) + 500;
@@ -249,7 +249,7 @@ export default function Post({ content, timestamp }: PostProps) {
         if (!mounted) return;
         setMetrics(prev => {
           const likesIncrease = Math.floor(Math.random() * 300) + 200; // MUCH HIGHER: 200-499
-          const retweetsIncrease = Math.floor(Math.random() * 80) + 50; // MUCH HIGHER: 50-129
+          const retweetsIncrease = Math.floor(Math.random() * 80) + 15; // MUCH HIGHER: 50-129
           const newLikes = prev.likes + likesIncrease;
           const newRetweets = prev.retweets + retweetsIncrease;
           const newViews = prev.views + Math.floor(Math.random() * 15000) + 10000; // EXPLOSIVE: 10000-24999
@@ -281,7 +281,7 @@ export default function Post({ content, timestamp }: PostProps) {
             setShowNotification(true);
           }
           const likesIncrease = Math.floor(Math.random() * 500) + 300; // INSANE: 300-799
-          const retweetsIncrease = Math.floor(Math.random() * 150) + 100; // INSANE: 100-249
+          const retweetsIncrease = Math.floor(Math.random() * 150) + 30; // INSANE: 100-249
           const newLikes = prev.likes + likesIncrease;
           const newRetweets = prev.retweets + retweetsIncrease;
           const newViews = prev.views + Math.floor(Math.random() * 25000) + 20000; // EXPLOSIVE: 20000-44999
@@ -313,7 +313,7 @@ export default function Post({ content, timestamp }: PostProps) {
             return prev;
           }
           const likesIncrease = Math.floor(Math.random() * 800) + 500; // LEGENDARY: 500-1299
-          const retweetsIncrease = Math.floor(Math.random() * 250) + 150; // LEGENDARY: 150-399
+          const retweetsIncrease = Math.floor(Math.random() * 250) + 70; // LEGENDARY: 150-399
           const newLikes = prev.likes + likesIncrease;
           const newRetweets = prev.retweets + retweetsIncrease;
           const newViews = prev.views + Math.floor(Math.random() * 40000) + 30000; // ULTIMATE: 30000-69999
