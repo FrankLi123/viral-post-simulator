@@ -46,7 +46,7 @@ const viralComments: Omit<Comment, 'id' | 'timestamp' | 'likes' | 'retweets' | '
   { author: 'Innovation CEO', handle: '@innovationceo', content: 'This is how innovation happens! 💡', verified: true, baseLikes: 743, baseRetweets: 321, baseReplies: 67 },
 ];
 
-// Rolling/Odometer Animated Number Component with hydration fix
+// Simple Animated Number Component with hydration fix
 function AnimatedNumber({ value, className }: { value: number; className?: string }) {
   const [displayValue, setDisplayValue] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -60,30 +60,8 @@ function AnimatedNumber({ value, className }: { value: number; className?: strin
     if (!mounted) return;
     if (displayValue !== value) {
       setIsAnimating(true);
-      
-      // Rolling animation - increment gradually to the target value
-      const startValue = displayValue;
-      const endValue = value;
-      const duration = 800; // Animation duration in ms
-      const steps = Math.min(20, Math.abs(endValue - startValue)); // Max 20 steps for smooth animation
-      const increment = (endValue - startValue) / steps;
-      const stepDuration = duration / steps;
-      
-      let currentStep = 0;
-      const timer = setInterval(() => {
-        currentStep++;
-        const newValue = Math.round(startValue + (increment * currentStep));
-        
-        if (currentStep >= steps) {
-          setDisplayValue(endValue);
-          setIsAnimating(false);
-          clearInterval(timer);
-        } else {
-          setDisplayValue(newValue);
-        }
-      }, stepDuration);
-      
-      return () => clearInterval(timer);
+      setDisplayValue(value);
+      setTimeout(() => setIsAnimating(false), 300);
     }
   }, [value, displayValue, mounted]);
 
@@ -96,11 +74,9 @@ function AnimatedNumber({ value, className }: { value: number; className?: strin
   if (!mounted) return <span className={className}>0</span>;
 
   return (
-    <div className="overflow-hidden">
-      <span className={`${className} ${isAnimating ? 'text-[#1d9bf0]' : ''} transition-colors duration-300 inline-block transform ${isAnimating ? 'animate-pulse' : ''}`}>
-        {formatNumber(displayValue)}
-      </span>
-    </div>
+    <span className={`${className} ${isAnimating ? 'text-[#1d9bf0]' : ''} transition-colors duration-300`}>
+      {formatNumber(displayValue)}
+    </span>
   );
 }
 
@@ -182,12 +158,8 @@ export default function Post({ content, timestamp }: PostProps) {
     intervals.push(setTimeout(() => {
       if (hasReachedLimit || !mounted) return;
       const likesInterval = setInterval(() => {
-        if (!mounted) return;
+        if (!mounted || viralStage >= 1) return; // Stop when viral stages begin
         setMetrics(prev => {
-          if (prev.views >= 1000000) {
-            setHasReachedLimit(true);
-            return prev;
-          }
           return {
             ...prev,
             likes: prev.likes + Math.floor(Math.random() * 5) + 1,
@@ -202,12 +174,8 @@ export default function Post({ content, timestamp }: PostProps) {
     intervals.push(setTimeout(() => {
       if (hasReachedLimit || !mounted) return;
       const retweetInterval = setInterval(() => {
-        if (!mounted) return;
+        if (!mounted || viralStage >= 1) return; // Stop when viral stages begin
         setMetrics(prev => {
-          if (prev.views >= 1000000) {
-            setHasReachedLimit(true);
-            return prev;
-          }
           return {
             ...prev,
             retweets: prev.retweets + Math.floor(Math.random() * 4) + 1, // Slower than likes but faster than comments
@@ -250,12 +218,6 @@ export default function Post({ content, timestamp }: PostProps) {
       const explosionInterval = setInterval(() => {
         if (!mounted) return;
         setMetrics(prev => {
-          if (prev.views >= 1000000) {
-            setHasReachedLimit(true);
-            setViralStage(3);
-            setShowNotification(true);
-            return { ...prev, views: 1000000 };
-          }
           const likesIncrease = Math.floor(Math.random() * 50) + 25;
           const retweetsIncrease = Math.floor(Math.random() * 12) + 5; // Slower retweet growth
           const newLikes = prev.likes + likesIncrease;
@@ -274,25 +236,23 @@ export default function Post({ content, timestamp }: PostProps) {
       intervals.push(explosionInterval);
     }, 30000));
 
-    // Stage 5: Mega viral (60s) - Ultra exponential
+    // Stage 5: Mega viral (60s) - ULTRA FAST! Aiming for 3M
     intervals.push(setTimeout(() => {
       if (hasReachedLimit || !mounted) return;
+      // Clear all previous intervals to prevent interference
+      intervals.forEach(interval => clearInterval(interval));
+      intervals.length = 0;
+      
       setViralStage(2);
       setShowNotification(true);
       const megaViralInterval = setInterval(() => {
         if (!mounted) return;
         setMetrics(prev => {
-          if (prev.views >= 1000000) {
-            setHasReachedLimit(true);
-            setViralStage(3);
-            setShowNotification(true);
-            return { ...prev, views: 1000000 };
-          }
-          const likesIncrease = Math.floor(Math.random() * 100) + 50;
-          const retweetsIncrease = Math.floor(Math.random() * 25) + 12; // Slower retweet growth even in mega viral
+          const likesIncrease = Math.floor(Math.random() * 300) + 200; // MUCH HIGHER: 200-499
+          const retweetsIncrease = Math.floor(Math.random() * 80) + 50; // MUCH HIGHER: 50-129
           const newLikes = prev.likes + likesIncrease;
           const newRetweets = prev.retweets + retweetsIncrease;
-          const newViews = prev.views + Math.floor(Math.random() * 5000) + 2000;
+          const newViews = prev.views + Math.floor(Math.random() * 15000) + 10000; // EXPLOSIVE: 10000-24999
           
           return {
             ...prev,
@@ -301,10 +261,74 @@ export default function Post({ content, timestamp }: PostProps) {
             views: newViews,
           };
         });
-        updateCommentMetrics(); // Update comment metrics during viral stages
-      }, 100);
+        updateCommentMetrics();
+      }, 40); // MUCH FASTER: every 40ms instead of 100ms
       intervals.push(megaViralInterval);
     }, 60000));
+
+    // Stage 6: Super Mega Viral (90s) - INSANE SPEED! Target 3M+
+    intervals.push(setTimeout(() => {
+      if (hasReachedLimit || !mounted) return;
+      // Clear all previous intervals again
+      intervals.forEach(interval => clearInterval(interval));
+      intervals.length = 0;
+      
+      const superMegaInterval = setInterval(() => {
+        if (!mounted) return;
+        setMetrics(prev => {
+          if (prev.views >= 3000000) {
+            setViralStage(3);
+            setShowNotification(true);
+          }
+          const likesIncrease = Math.floor(Math.random() * 500) + 300; // INSANE: 300-799
+          const retweetsIncrease = Math.floor(Math.random() * 150) + 100; // INSANE: 100-249
+          const newLikes = prev.likes + likesIncrease;
+          const newRetweets = prev.retweets + retweetsIncrease;
+          const newViews = prev.views + Math.floor(Math.random() * 25000) + 20000; // EXPLOSIVE: 20000-44999
+          
+          return {
+            ...prev,
+            likes: newLikes,
+            retweets: newRetweets,
+            views: newViews,
+          };
+        });
+        updateCommentMetrics();
+      }, 30); // ULTRA FAST: every 30ms
+      intervals.push(superMegaInterval);
+    }, 90000));
+
+    // Stage 7: Legendary Viral (120s) - ULTIMATE GROWTH! 5M+ TARGET
+    intervals.push(setTimeout(() => {
+      if (hasReachedLimit || !mounted) return;
+      // Clear all previous intervals once more
+      intervals.forEach(interval => clearInterval(interval));
+      intervals.length = 0;
+      
+      const legendaryInterval = setInterval(() => {
+        if (!mounted) return;
+        setMetrics(prev => {
+          if (prev.views >= 5000000) {
+            setHasReachedLimit(true);
+            return prev;
+          }
+          const likesIncrease = Math.floor(Math.random() * 800) + 500; // LEGENDARY: 500-1299
+          const retweetsIncrease = Math.floor(Math.random() * 250) + 150; // LEGENDARY: 150-399
+          const newLikes = prev.likes + likesIncrease;
+          const newRetweets = prev.retweets + retweetsIncrease;
+          const newViews = prev.views + Math.floor(Math.random() * 40000) + 30000; // ULTIMATE: 30000-69999
+          
+          return {
+            ...prev,
+            likes: newLikes,
+            retweets: newRetweets,
+            views: newViews,
+          };
+        });
+        updateCommentMetrics();
+      }, 20); // ULTIMATE SPEED: every 20ms
+      intervals.push(legendaryInterval);
+    }, 120000));
 
     // Comment metrics growth interval - starts after first comments appear
     intervals.push(setTimeout(() => {
@@ -329,7 +353,7 @@ export default function Post({ content, timestamp }: PostProps) {
       case 2:
         return "🚀 You're trending! #1 in Technology";
       case 3:
-        return "🎉 LEGENDARY! 1M VIEWS REACHED! 👑";
+        return "🎉 LEGENDARY! ULTIMATE VIRAL STATUS! 👑";
       default:
         return "";
     }

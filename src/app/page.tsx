@@ -72,8 +72,8 @@ export default function LandingPage() {
             </div>
             <div className="bg-[#16181c] border border-[#2f3336] rounded-xl p-4 text-center">
               <Heart className="text-[#f91880] mx-auto mb-2" size={24} />
-              <div className="text-sm font-bold">Real Metrics</div>
-              <div className="text-xs text-[#71767b]">Authentic growth</div>
+              <div className="text-sm font-bold">Fake Metrics</div>
+              <div className="text-xs text-[#71767b]">Simulated fun</div>
             </div>
             <div className="bg-[#16181c] border border-[#2f3336] rounded-xl p-4 text-center">
               <MessageCircle className="text-[#1d9bf0] mx-auto mb-2" size={24} />
