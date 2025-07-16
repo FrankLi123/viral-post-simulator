@@ -617,7 +617,7 @@ export default function Post({ content, timestamp }: PostProps) {
       }
       timeouts.forEach(timeout => clearTimeout(timeout));
     };
-  }, [mounted, timestamp, showNextNotification, hasReachedLimit, incrementMessage]);
+  }, [mounted, timestamp, showNextNotification, hasReachedLimit]);
 
   // Separate useEffect for comment metrics updates
   useEffect(() => {
