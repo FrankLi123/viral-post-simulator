@@ -10,12 +10,7 @@ export const metadata: Metadata = {
     title: "Viral Post Simulator - Experience Going Viral",
     description: "Watch your post go viral with fake metrics and comments!",
     type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Viral Post Simulator",
-    description: "Experience the rush of going viral (safely)!",
-  },
+  }
 };
 
 export default function RootLayout({
