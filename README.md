@@ -14,12 +14,13 @@ A fun, interactive social media simulation that lets you experience what it's li
 
 ## ✨ Features
 
-- **Realistic Viral Progression**: Watch your post grow through 5 stages of virality
+- **Realistic Viral Progression**: Watch your post grow through 9 stages of virality
 - **Authentic Metrics**: Likes, reposts, comments, and views that feel real
-- **Celebrity-Style Comments**: Fictional comments from tech industry personas
+- **Fictional Comments**: Simulated comments from fictional tech industry personas
 - **Live Notifications**: Get that dopamine rush as engagement pours in
 - **Analytics Dashboard**: Deep dive into your viral performance
 - **Personalized Experience**: Use your own name and handle
+- **Message Notifications**: Watch message count grow with viral stages
 
 ## 🚀 How It Works
 
@@ -30,7 +31,11 @@ A fun, interactive social media simulation that lets you experience what it's li
    - **Stage 2**: Building momentum (reposts begin)
    - **Stage 3**: Comments appear (engagement explodes)
    - **Stage 4**: Going viral (exponential growth)
-   - **Stage 5**: Mega viral (1M+ views achieved!)
+   - **Stage 5**: Mega viral (explosive growth)
+   - **Stage 6**: Breaking viral (internet breaker)
+   - **Stage 7**: Legendary status (global phenomenon)
+   - **Stage 8**: Ultimate viral (making history)
+   - **Stage 9**: World record (biggest viral post ever!)
 
 ## 🛠️ Tech Stack
 
@@ -44,7 +49,7 @@ A fun, interactive social media simulation that lets you experience what it's li
 
 ```bash
 # Clone the repository
-git clone [repository-url]
+git clone <your-repository-url>
 
 # Install dependencies
 npm install
