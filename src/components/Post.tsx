@@ -239,10 +239,6 @@ export default function Post({ content, timestamp }: PostProps) {
               return [...prevComments, ...newComments];
             });
           }
-          // Message increment: slow
-          if (Math.random() < 0.10) {
-            incrementMessage(Math.floor(Math.random() * 2) + 1); // 1-2
-          }
           return {
             ...prev,
             likes: prev.likes + Math.floor(Math.random() * 5) + 1,
@@ -251,6 +247,10 @@ export default function Post({ content, timestamp }: PostProps) {
             views: prev.views + Math.floor(Math.random() * 100) + 50,
           };
         });
+        // Message increment: slow (moved outside setMetrics)
+        if (Math.random() < 0.10) {
+          incrementMessage(Math.floor(Math.random() * 2) + 1); // 1-2
+        }
       }, 600);
     }, 10000));
 
@@ -287,10 +287,6 @@ export default function Post({ content, timestamp }: PostProps) {
             }
             return [...prevComments, ...newComments];
           });
-          // Message increment: a bit faster
-          if (Math.random() < 0.20) {
-            incrementMessage(Math.floor(Math.random() * 3) + 1); // 1-3
-          }
           const newLikes = prev.likes + likesIncrease;
           const newRetweets = prev.retweets + retweetsIncrease;
           const newViews = prev.views + Math.floor(Math.random() * 2000) + 1000; // 1000-2999
@@ -302,6 +298,10 @@ export default function Post({ content, timestamp }: PostProps) {
             views: newViews,
           };
         });
+        // Message increment: a bit faster (moved outside setMetrics)
+        if (Math.random() < 0.20) {
+          incrementMessage(Math.floor(Math.random() * 3) + 1); // 1-3
+        }
       }, 200);
     }, 30000));
 
@@ -338,10 +338,6 @@ export default function Post({ content, timestamp }: PostProps) {
             }
             return [...prevComments, ...newComments];
           });
-          // Message increment: moderate
-          if (Math.random() < 0.35) {
-            incrementMessage(Math.floor(Math.random() * 4) + 2); // 2-5
-          }
           const newLikes = prev.likes + likesIncrease;
           const newRetweets = prev.retweets + retweetsIncrease;
           const newViews = prev.views + Math.floor(Math.random() * 20000) + 15000; // 15000-34999
@@ -353,6 +349,10 @@ export default function Post({ content, timestamp }: PostProps) {
             views: newViews,
           };
         });
+        // Message increment: moderate (moved outside setMetrics)
+        if (Math.random() < 0.35) {
+          incrementMessage(Math.floor(Math.random() * 4) + 2); // 2-5
+        }
       }, 100);
     }, 60000));
 
@@ -389,10 +389,6 @@ export default function Post({ content, timestamp }: PostProps) {
             }
             return [...prevComments, ...newComments];
           });
-          // Message increment: fast
-          if (Math.random() < 0.5) {
-            incrementMessage(Math.floor(Math.random() * 6) + 3); // 3-8
-          }
           const newLikes = prev.likes + likesIncrease;
           const newRetweets = prev.retweets + retweetsIncrease;
           const newViews = prev.views + Math.floor(Math.random() * 40000) + 30000; // 30000-69999
@@ -404,6 +400,10 @@ export default function Post({ content, timestamp }: PostProps) {
             views: newViews,
           };
         });
+        // Message increment: fast (moved outside setMetrics)
+        if (Math.random() < 0.5) {
+          incrementMessage(Math.floor(Math.random() * 6) + 3); // 3-8
+        }
       }, 60);
     }, 90000));
 
@@ -440,10 +440,6 @@ export default function Post({ content, timestamp }: PostProps) {
             }
             return [...prevComments, ...newComments];
           });
-          // Message increment: very fast
-          if (Math.random() < 0.7) {
-            incrementMessage(Math.floor(Math.random() * 11) + 5); // 5-15
-          }
           const newLikes = prev.likes + likesIncrease;
           const newRetweets = prev.retweets + retweetsIncrease;
           const newViews = prev.views + Math.floor(Math.random() * 80000) + 60000; // 60000-139999
@@ -455,6 +451,10 @@ export default function Post({ content, timestamp }: PostProps) {
             views: newViews,
           };
         });
+        // Message increment: very fast (moved outside setMetrics)
+        if (Math.random() < 0.7) {
+          incrementMessage(Math.floor(Math.random() * 11) + 5); // 5-15
+        }
       }, 40);
     }, 150000));
 
@@ -491,10 +491,6 @@ export default function Post({ content, timestamp }: PostProps) {
             }
             return [...prevComments, ...newComments];
           });
-          // Message increment: explosive
-          if (Math.random() < 0.85) {
-            incrementMessage(Math.floor(Math.random() * 21) + 10); // 10-30
-          }
           const newLikes = prev.likes + likesIncrease;
           const newRetweets = prev.retweets + retweetsIncrease;
           const newViews = prev.views + Math.floor(Math.random() * 150000) + 100000; // 100000-249999
@@ -506,6 +502,10 @@ export default function Post({ content, timestamp }: PostProps) {
             views: newViews,
           };
         });
+        // Message increment: explosive (moved outside setMetrics)
+        if (Math.random() < 0.85) {
+          incrementMessage(Math.floor(Math.random() * 21) + 10); // 10-30
+        }
       }, 30);
     }, 180000));
 
@@ -542,10 +542,6 @@ export default function Post({ content, timestamp }: PostProps) {
             }
             return [...prevComments, ...newComments];
           });
-          // Message increment: insane
-          if (Math.random() < 0.95) {
-            incrementMessage(Math.floor(Math.random() * 31) + 20); // 20-50
-          }
           const newLikes = prev.likes + likesIncrease;
           const newRetweets = prev.retweets + retweetsIncrease;
           const newViews = prev.views + Math.floor(Math.random() * 300000) + 200000; // 200000-499999
@@ -557,6 +553,10 @@ export default function Post({ content, timestamp }: PostProps) {
             views: newViews,
           };
         });
+        // Message increment: insane (moved outside setMetrics)
+        if (Math.random() < 0.95) {
+          incrementMessage(Math.floor(Math.random() * 31) + 20); // 20-50
+        }
       }, 20);
     }, 240000));
 
@@ -593,10 +593,6 @@ export default function Post({ content, timestamp }: PostProps) {
             }
             return [...prevComments, ...newComments];
           });
-          // Message increment: world record
-          if (Math.random() < 0.99) {
-            incrementMessage(Math.floor(Math.random() * 60) + 40); // 40-99
-          }
           const newLikes = prev.likes + likesIncrease;
           const newRetweets = prev.retweets + retweetsIncrease;
           const newViews = prev.views + Math.floor(Math.random() * 500000) + 400000; // 400000-899999
@@ -608,6 +604,10 @@ export default function Post({ content, timestamp }: PostProps) {
             views: newViews,
           };
         });
+        // Message increment: world record (moved outside setMetrics)
+        if (Math.random() < 0.99) {
+          incrementMessage(Math.floor(Math.random() * 60) + 40); // 40-99
+        }
       }, 15);
     }, 300000));
 
