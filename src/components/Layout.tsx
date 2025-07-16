@@ -75,17 +75,7 @@ export default function Layout({ children }: LayoutProps) {
           </div>
         </div>
         
-        {/* Legal Disclaimer Footer - Positioned next to Post button */}
-        <footer className="fixed bottom-10 right-4 xl:right-280 bg-[#16181c] border border-[#2f3336] rounded-lg py-6 px-7 max-w-100 shadow-lg">
-          <div className="text-sm text-[#71767b]">
-            <p className="mb-3">
-              <strong className="text-[#1d9bf0]">📢 PARODY:</strong> Simulation app for entertainment only.
-            </p>
-            <p className="text-xs">
-              ⚠️ Not affiliated with X/Twitter. All metrics are fake.
-            </p>
-          </div>
-        </footer>
+
       </div>
     </NotificationContext.Provider>
   );
