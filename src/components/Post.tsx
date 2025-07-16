@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Heart, MessageCircle, Repeat2, Share, BarChart3, User, MoreHorizontal } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import AnalyticsModal from './AnalyticsModal';
@@ -617,7 +617,7 @@ export default function Post({ content, timestamp }: PostProps) {
       }
       timeouts.forEach(timeout => clearTimeout(timeout));
     };
-  }, [mounted, timestamp, showNextNotification, hasReachedLimit]);
+  }, [mounted, timestamp, showNextNotification, hasReachedLimit, incrementMessage]);
 
   // Separate useEffect for comment metrics updates
   useEffect(() => {
