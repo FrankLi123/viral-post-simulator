@@ -14,20 +14,24 @@ import { useUser } from '@/hooks/useUser';
 
 interface SidebarProps {
   notificationCount?: number;
+  messageCount?: number;
 }
 
 const navigationItems = [
   { icon: Home, label: 'Home', active: true },
   { icon: Search, label: 'Explore' },
   { icon: Bell, label: 'Notifications', showBadge: true },
-  { icon: Mail, label: 'Messages' },
+  { icon: Mail, label: 'Messages', showMessageBadge: true },
   { icon: Bookmark, label: 'Bookmarks' },
   { icon: User, label: 'Profile' },
   { icon: MoreHorizontal, label: 'More' },
 ];
 
-export default function Sidebar({ notificationCount = 0 }: SidebarProps) {
+export default function Sidebar({ notificationCount = 0, messageCount = 0 }: SidebarProps) {
   const userData = useUser();
+  
+  // Debug: log message count
+  console.log('Message count:', messageCount);
   
   return (
     <div className="p-4 h-full flex flex-col">
@@ -41,6 +45,7 @@ export default function Sidebar({ notificationCount = 0 }: SidebarProps) {
         {navigationItems.map((item) => {
           const Icon = item.icon;
           const showNotificationBadge = item.showBadge && notificationCount > 0;
+          const showMessageBadge = item.showMessageBadge && messageCount > 0;
           
           return (
             <div
@@ -51,10 +56,16 @@ export default function Sidebar({ notificationCount = 0 }: SidebarProps) {
             >
               <div className="relative">
                 <Icon size={24} />
-                {/* Notification Badge */}
-                {showNotificationBadge && (
+                {/* Notification Badge - only for Notifications */}
+                {item.label === 'Notifications' && showNotificationBadge && (
                   <div className="absolute -top-1 -right-1 bg-[#1d9bf0] text-white text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1">
                     {notificationCount > 999 ? '999+' : notificationCount}
+                  </div>
+                )}
+                {/* Message Badge - only for Messages */}
+                {item.label === 'Messages' && showMessageBadge && (
+                  <div className="absolute -top-1 -right-1 bg-[#1d9bf0] text-white text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1">
+                    {messageCount > 999 ? '999+' : messageCount}
                   </div>
                 )}
               </div>

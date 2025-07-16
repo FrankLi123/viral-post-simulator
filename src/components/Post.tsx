@@ -81,7 +81,7 @@ function AnimatedNumber({ value, className }: { value: number; className?: strin
 }
 
 export default function Post({ content, timestamp }: PostProps) {
-  const { setNotificationCount } = useNotifications();
+  const { setNotificationCount, incrementMessage } = useNotifications();
   const userData = useUser();
   
   const [metrics, setMetrics] = useState({
@@ -219,7 +219,6 @@ export default function Post({ content, timestamp }: PostProps) {
         setMetrics(prev => {
           const retweetIncrease = Math.random() < 0.3 ? 1 : 0; // Only 30% chance of getting 1 retweet
           const commentIncrease = Math.random() < 0.2 ? 1 : 0; // 20% chance of getting 1 comment
-          
           // Create actual comment objects when count increases
           if (commentIncrease > 0) {
             setAllComments(prevComments => {
@@ -240,7 +239,10 @@ export default function Post({ content, timestamp }: PostProps) {
               return [...prevComments, ...newComments];
             });
           }
-          
+          // Message increment: slow
+          if (Math.random() < 0.10) {
+            incrementMessage(Math.floor(Math.random() * 2) + 1); // 1-2
+          }
           return {
             ...prev,
             likes: prev.likes + Math.floor(Math.random() * 5) + 1,
@@ -264,40 +266,41 @@ export default function Post({ content, timestamp }: PostProps) {
             setHasReachedLimit(true);
             return prev;
           }
-                      const likesIncrease = Math.floor(Math.random() * 100) + 50; // 50-149
-            const retweetsIncrease = Math.floor(Math.random() * 3) + 1; // 1-3 (1:40+ ratio)
-            const commentIncrease = Math.floor(Math.random() * 2) + 1; // 1-2 comments
-            
-            // Create actual comment objects
-            setAllComments(prevComments => {
-              const newComments = [];
-              for (let i = 0; i < commentIncrease; i++) {
-                if (prevComments.length + i < viralComments.length) {
-                  const comment: Comment = {
-                    ...viralComments[prevComments.length + i],
-                    id: (prevComments.length + i + 1).toString(),
-                    timestamp: new Date(timestamp.getTime() + (prevComments.length + i + 1) * 300 + 15000),
-                    likes: 0,
-                    retweets: 0,
-                    replies: 0,
-                  };
-                  newComments.push(comment);
-                }
+          const likesIncrease = Math.floor(Math.random() * 100) + 50; // 50-149
+          const retweetsIncrease = Math.floor(Math.random() * 3) + 1; // 1-3 (1:40+ ratio)
+          const commentIncrease = Math.floor(Math.random() * 2) + 1; // 1-2 comments
+          // Create actual comment objects
+          setAllComments(prevComments => {
+            const newComments = [];
+            for (let i = 0; i < commentIncrease; i++) {
+              if (prevComments.length + i < viralComments.length) {
+                const comment: Comment = {
+                  ...viralComments[prevComments.length + i],
+                  id: (prevComments.length + i + 1).toString(),
+                  timestamp: new Date(timestamp.getTime() + (prevComments.length + i + 1) * 300 + 15000),
+                  likes: 0,
+                  retweets: 0,
+                  replies: 0,
+                };
+                newComments.push(comment);
               }
-              return [...prevComments, ...newComments];
-            });
-            
-            const newLikes = prev.likes + likesIncrease;
-            const newRetweets = prev.retweets + retweetsIncrease;
-            const newViews = prev.views + Math.floor(Math.random() * 2000) + 1000; // 1000-2999
-            
-            return {
-              ...prev,
-              likes: newLikes,
-              retweets: newRetweets,
-              comments: prev.comments + commentIncrease,
-              views: newViews,
-            };
+            }
+            return [...prevComments, ...newComments];
+          });
+          // Message increment: a bit faster
+          if (Math.random() < 0.20) {
+            incrementMessage(Math.floor(Math.random() * 3) + 1); // 1-3
+          }
+          const newLikes = prev.likes + likesIncrease;
+          const newRetweets = prev.retweets + retweetsIncrease;
+          const newViews = prev.views + Math.floor(Math.random() * 2000) + 1000; // 1000-2999
+          return {
+            ...prev,
+            likes: newLikes,
+            retweets: newRetweets,
+            comments: prev.comments + commentIncrease,
+            views: newViews,
+          };
         });
       }, 200);
     }, 30000));
@@ -314,40 +317,41 @@ export default function Post({ content, timestamp }: PostProps) {
             setHasReachedLimit(true);
             return prev;
           }
-                      const likesIncrease = Math.floor(Math.random() * 500) + 300; // 300-799
-            const retweetsIncrease = Math.floor(Math.random() * 14) + 7; // 7-20 (1:40+ ratio)
-            const commentIncrease = Math.floor(Math.random() * 4) + 2; // 2-5 comments
-            
-            // Create actual comment objects
-            setAllComments(prevComments => {
-              const newComments = [];
-              for (let i = 0; i < commentIncrease; i++) {
-                if (prevComments.length + i < viralComments.length) {
-                  const comment: Comment = {
-                    ...viralComments[prevComments.length + i],
-                    id: (prevComments.length + i + 1).toString(),
-                    timestamp: new Date(timestamp.getTime() + (prevComments.length + i + 1) * 300 + 15000),
-                    likes: 0,
-                    retweets: 0,
-                    replies: 0,
-                  };
-                  newComments.push(comment);
-                }
+          const likesIncrease = Math.floor(Math.random() * 500) + 300; // 300-799
+          const retweetsIncrease = Math.floor(Math.random() * 14) + 7; // 7-20 (1:40+ ratio)
+          const commentIncrease = Math.floor(Math.random() * 4) + 2; // 2-5 comments
+          // Create actual comment objects
+          setAllComments(prevComments => {
+            const newComments = [];
+            for (let i = 0; i < commentIncrease; i++) {
+              if (prevComments.length + i < viralComments.length) {
+                const comment: Comment = {
+                  ...viralComments[prevComments.length + i],
+                  id: (prevComments.length + i + 1).toString(),
+                  timestamp: new Date(timestamp.getTime() + (prevComments.length + i + 1) * 300 + 15000),
+                  likes: 0,
+                  retweets: 0,
+                  replies: 0,
+                };
+                newComments.push(comment);
               }
-              return [...prevComments, ...newComments];
-            });
-            
-            const newLikes = prev.likes + likesIncrease;
-            const newRetweets = prev.retweets + retweetsIncrease;
-            const newViews = prev.views + Math.floor(Math.random() * 20000) + 15000; // 15000-34999
-            
-            return {
-              ...prev,
-              likes: newLikes,
-              retweets: newRetweets,
-              comments: prev.comments + commentIncrease,
-              views: newViews,
-            };
+            }
+            return [...prevComments, ...newComments];
+          });
+          // Message increment: moderate
+          if (Math.random() < 0.35) {
+            incrementMessage(Math.floor(Math.random() * 4) + 2); // 2-5
+          }
+          const newLikes = prev.likes + likesIncrease;
+          const newRetweets = prev.retweets + retweetsIncrease;
+          const newViews = prev.views + Math.floor(Math.random() * 20000) + 15000; // 15000-34999
+          return {
+            ...prev,
+            likes: newLikes,
+            retweets: newRetweets,
+            comments: prev.comments + commentIncrease,
+            views: newViews,
+          };
         });
       }, 100);
     }, 60000));
@@ -364,40 +368,41 @@ export default function Post({ content, timestamp }: PostProps) {
             setHasReachedLimit(true);
             return prev;
           }
-                      const likesIncrease = Math.floor(Math.random() * 1000) + 800; // 800-1799
-            const retweetsIncrease = Math.floor(Math.random() * 26) + 20; // 20-45 (1:40+ ratio)
-            const commentIncrease = Math.floor(Math.random() * 8) + 5; // 5-12 comments
-            
-            // Create actual comment objects
-            setAllComments(prevComments => {
-              const newComments = [];
-              for (let i = 0; i < commentIncrease; i++) {
-                if (prevComments.length + i < viralComments.length) {
-                  const comment: Comment = {
-                    ...viralComments[prevComments.length + i],
-                    id: (prevComments.length + i + 1).toString(),
-                    timestamp: new Date(timestamp.getTime() + (prevComments.length + i + 1) * 300 + 15000),
-                    likes: 0,
-                    retweets: 0,
-                    replies: 0,
-                  };
-                  newComments.push(comment);
-                }
+          const likesIncrease = Math.floor(Math.random() * 1000) + 800; // 800-1799
+          const retweetsIncrease = Math.floor(Math.random() * 26) + 20; // 20-45 (1:40+ ratio)
+          const commentIncrease = Math.floor(Math.random() * 8) + 5; // 5-12 comments
+          // Create actual comment objects
+          setAllComments(prevComments => {
+            const newComments = [];
+            for (let i = 0; i < commentIncrease; i++) {
+              if (prevComments.length + i < viralComments.length) {
+                const comment: Comment = {
+                  ...viralComments[prevComments.length + i],
+                  id: (prevComments.length + i + 1).toString(),
+                  timestamp: new Date(timestamp.getTime() + (prevComments.length + i + 1) * 300 + 15000),
+                  likes: 0,
+                  retweets: 0,
+                  replies: 0,
+                };
+                newComments.push(comment);
               }
-              return [...prevComments, ...newComments];
-            });
-            
-            const newLikes = prev.likes + likesIncrease;
-            const newRetweets = prev.retweets + retweetsIncrease;
-            const newViews = prev.views + Math.floor(Math.random() * 40000) + 30000; // 30000-69999
-            
-            return {
-              ...prev,
-              likes: newLikes,
-              retweets: newRetweets,
-              comments: prev.comments + commentIncrease,
-              views: newViews,
-            };
+            }
+            return [...prevComments, ...newComments];
+          });
+          // Message increment: fast
+          if (Math.random() < 0.5) {
+            incrementMessage(Math.floor(Math.random() * 6) + 3); // 3-8
+          }
+          const newLikes = prev.likes + likesIncrease;
+          const newRetweets = prev.retweets + retweetsIncrease;
+          const newViews = prev.views + Math.floor(Math.random() * 40000) + 30000; // 30000-69999
+          return {
+            ...prev,
+            likes: newLikes,
+            retweets: newRetweets,
+            comments: prev.comments + commentIncrease,
+            views: newViews,
+          };
         });
       }, 60);
     }, 90000));
@@ -414,40 +419,41 @@ export default function Post({ content, timestamp }: PostProps) {
             setHasReachedLimit(true);
             return prev;
           }
-                      const likesIncrease = Math.floor(Math.random() * 2000) + 1500; // 1500-3499
-            const retweetsIncrease = Math.floor(Math.random() * 51) + 37; // 37-87 (1:40+ ratio)
-            const commentIncrease = Math.floor(Math.random() * 15) + 10; // 10-24 comments
-            
-            // Create actual comment objects
-            setAllComments(prevComments => {
-              const newComments = [];
-              for (let i = 0; i < commentIncrease; i++) {
-                if (prevComments.length + i < viralComments.length) {
-                  const comment: Comment = {
-                    ...viralComments[prevComments.length + i],
-                    id: (prevComments.length + i + 1).toString(),
-                    timestamp: new Date(timestamp.getTime() + (prevComments.length + i + 1) * 300 + 15000),
-                    likes: 0,
-                    retweets: 0,
-                    replies: 0,
-                  };
-                  newComments.push(comment);
-                }
+          const likesIncrease = Math.floor(Math.random() * 2000) + 1500; // 1500-3499
+          const retweetsIncrease = Math.floor(Math.random() * 51) + 37; // 37-87 (1:40+ ratio)
+          const commentIncrease = Math.floor(Math.random() * 15) + 10; // 10-24 comments
+          // Create actual comment objects
+          setAllComments(prevComments => {
+            const newComments = [];
+            for (let i = 0; i < commentIncrease; i++) {
+              if (prevComments.length + i < viralComments.length) {
+                const comment: Comment = {
+                  ...viralComments[prevComments.length + i],
+                  id: (prevComments.length + i + 1).toString(),
+                  timestamp: new Date(timestamp.getTime() + (prevComments.length + i + 1) * 300 + 15000),
+                  likes: 0,
+                  retweets: 0,
+                  replies: 0,
+                };
+                newComments.push(comment);
               }
-              return [...prevComments, ...newComments];
-            });
-            
-            const newLikes = prev.likes + likesIncrease;
-            const newRetweets = prev.retweets + retweetsIncrease;
-            const newViews = prev.views + Math.floor(Math.random() * 80000) + 60000; // 60000-139999
-            
-            return {
-              ...prev,
-              likes: newLikes,
-              retweets: newRetweets,
-              comments: prev.comments + commentIncrease,
-              views: newViews,
-            };
+            }
+            return [...prevComments, ...newComments];
+          });
+          // Message increment: very fast
+          if (Math.random() < 0.7) {
+            incrementMessage(Math.floor(Math.random() * 11) + 5); // 5-15
+          }
+          const newLikes = prev.likes + likesIncrease;
+          const newRetweets = prev.retweets + retweetsIncrease;
+          const newViews = prev.views + Math.floor(Math.random() * 80000) + 60000; // 60000-139999
+          return {
+            ...prev,
+            likes: newLikes,
+            retweets: newRetweets,
+            comments: prev.comments + commentIncrease,
+            views: newViews,
+          };
         });
       }, 40);
     }, 150000));
@@ -464,40 +470,41 @@ export default function Post({ content, timestamp }: PostProps) {
             setHasReachedLimit(true);
             return prev;
           }
-                      const likesIncrease = Math.floor(Math.random() * 4000) + 3000; // 3000-6999
-            const retweetsIncrease = Math.floor(Math.random() * 101) + 75; // 75-175 (1:40+ ratio)
-            const commentIncrease = Math.floor(Math.random() * 30) + 25; // 25-54 comments
-            
-            // Create actual comment objects
-            setAllComments(prevComments => {
-              const newComments = [];
-              for (let i = 0; i < commentIncrease; i++) {
-                if (prevComments.length + i < viralComments.length) {
-                  const comment: Comment = {
-                    ...viralComments[prevComments.length + i],
-                    id: (prevComments.length + i + 1).toString(),
-                    timestamp: new Date(timestamp.getTime() + (prevComments.length + i + 1) * 300 + 15000),
-                    likes: 0,
-                    retweets: 0,
-                    replies: 0,
-                  };
-                  newComments.push(comment);
-                }
+          const likesIncrease = Math.floor(Math.random() * 4000) + 3000; // 3000-6999
+          const retweetsIncrease = Math.floor(Math.random() * 101) + 75; // 75-175 (1:40+ ratio)
+          const commentIncrease = Math.floor(Math.random() * 30) + 25; // 25-54 comments
+          // Create actual comment objects
+          setAllComments(prevComments => {
+            const newComments = [];
+            for (let i = 0; i < commentIncrease; i++) {
+              if (prevComments.length + i < viralComments.length) {
+                const comment: Comment = {
+                  ...viralComments[prevComments.length + i],
+                  id: (prevComments.length + i + 1).toString(),
+                  timestamp: new Date(timestamp.getTime() + (prevComments.length + i + 1) * 300 + 15000),
+                  likes: 0,
+                  retweets: 0,
+                  replies: 0,
+                };
+                newComments.push(comment);
               }
-              return [...prevComments, ...newComments];
-            });
-            
-            const newLikes = prev.likes + likesIncrease;
-            const newRetweets = prev.retweets + retweetsIncrease;
-            const newViews = prev.views + Math.floor(Math.random() * 150000) + 100000; // 100000-249999
-            
-            return {
-              ...prev,
-              likes: newLikes,
-              retweets: newRetweets,
-              comments: prev.comments + commentIncrease,
-              views: newViews,
-            };
+            }
+            return [...prevComments, ...newComments];
+          });
+          // Message increment: explosive
+          if (Math.random() < 0.85) {
+            incrementMessage(Math.floor(Math.random() * 21) + 10); // 10-30
+          }
+          const newLikes = prev.likes + likesIncrease;
+          const newRetweets = prev.retweets + retweetsIncrease;
+          const newViews = prev.views + Math.floor(Math.random() * 150000) + 100000; // 100000-249999
+          return {
+            ...prev,
+            likes: newLikes,
+            retweets: newRetweets,
+            comments: prev.comments + commentIncrease,
+            views: newViews,
+          };
         });
       }, 30);
     }, 180000));
@@ -514,40 +521,41 @@ export default function Post({ content, timestamp }: PostProps) {
             setHasReachedLimit(true);
             return prev;
           }
-                      const likesIncrease = Math.floor(Math.random() * 8000) + 6000; // 6000-13999
-            const retweetsIncrease = Math.floor(Math.random() * 201) + 150; // 150-350 (1:40+ ratio)
-            const commentIncrease = Math.floor(Math.random() * 50) + 40; // 40-89 comments
-            
-            // Create actual comment objects
-            setAllComments(prevComments => {
-              const newComments = [];
-              for (let i = 0; i < commentIncrease; i++) {
-                if (prevComments.length + i < viralComments.length) {
-                  const comment: Comment = {
-                    ...viralComments[prevComments.length + i],
-                    id: (prevComments.length + i + 1).toString(),
-                    timestamp: new Date(timestamp.getTime() + (prevComments.length + i + 1) * 300 + 15000),
-                    likes: 0,
-                    retweets: 0,
-                    replies: 0,
-                  };
-                  newComments.push(comment);
-                }
+          const likesIncrease = Math.floor(Math.random() * 8000) + 6000; // 6000-13999
+          const retweetsIncrease = Math.floor(Math.random() * 201) + 150; // 150-350 (1:40+ ratio)
+          const commentIncrease = Math.floor(Math.random() * 50) + 40; // 40-89 comments
+          // Create actual comment objects
+          setAllComments(prevComments => {
+            const newComments = [];
+            for (let i = 0; i < commentIncrease; i++) {
+              if (prevComments.length + i < viralComments.length) {
+                const comment: Comment = {
+                  ...viralComments[prevComments.length + i],
+                  id: (prevComments.length + i + 1).toString(),
+                  timestamp: new Date(timestamp.getTime() + (prevComments.length + i + 1) * 300 + 15000),
+                  likes: 0,
+                  retweets: 0,
+                  replies: 0,
+                };
+                newComments.push(comment);
               }
-              return [...prevComments, ...newComments];
-            });
-            
-            const newLikes = prev.likes + likesIncrease;
-            const newRetweets = prev.retweets + retweetsIncrease;
-            const newViews = prev.views + Math.floor(Math.random() * 300000) + 200000; // 200000-499999
-            
-            return {
-              ...prev,
-              likes: newLikes,
-              retweets: newRetweets,
-              comments: prev.comments + commentIncrease,
-              views: newViews,
-            };
+            }
+            return [...prevComments, ...newComments];
+          });
+          // Message increment: insane
+          if (Math.random() < 0.95) {
+            incrementMessage(Math.floor(Math.random() * 31) + 20); // 20-50
+          }
+          const newLikes = prev.likes + likesIncrease;
+          const newRetweets = prev.retweets + retweetsIncrease;
+          const newViews = prev.views + Math.floor(Math.random() * 300000) + 200000; // 200000-499999
+          return {
+            ...prev,
+            likes: newLikes,
+            retweets: newRetweets,
+            comments: prev.comments + commentIncrease,
+            views: newViews,
+          };
         });
       }, 20);
     }, 240000));
@@ -564,40 +572,41 @@ export default function Post({ content, timestamp }: PostProps) {
             setHasReachedLimit(true);
             return prev;
           }
-                      const likesIncrease = Math.floor(Math.random() * 15000) + 10000; // 10000-24999
-            const retweetsIncrease = Math.floor(Math.random() * 376) + 250; // 250-625 (1:40+ ratio)
-            const commentIncrease = Math.floor(Math.random() * 100) + 80; // 80-179 comments
-            
-            // Create actual comment objects
-            setAllComments(prevComments => {
-              const newComments = [];
-              for (let i = 0; i < commentIncrease; i++) {
-                if (prevComments.length + i < viralComments.length) {
-                  const comment: Comment = {
-                    ...viralComments[prevComments.length + i],
-                    id: (prevComments.length + i + 1).toString(),
-                    timestamp: new Date(timestamp.getTime() + (prevComments.length + i + 1) * 300 + 15000),
-                    likes: 0,
-                    retweets: 0,
-                    replies: 0,
-                  };
-                  newComments.push(comment);
-                }
+          const likesIncrease = Math.floor(Math.random() * 15000) + 10000; // 10000-24999
+          const retweetsIncrease = Math.floor(Math.random() * 376) + 250; // 250-625 (1:40+ ratio)
+          const commentIncrease = Math.floor(Math.random() * 100) + 80; // 80-179 comments
+          // Create actual comment objects
+          setAllComments(prevComments => {
+            const newComments = [];
+            for (let i = 0; i < commentIncrease; i++) {
+              if (prevComments.length + i < viralComments.length) {
+                const comment: Comment = {
+                  ...viralComments[prevComments.length + i],
+                  id: (prevComments.length + i + 1).toString(),
+                  timestamp: new Date(timestamp.getTime() + (prevComments.length + i + 1) * 300 + 15000),
+                  likes: 0,
+                  retweets: 0,
+                  replies: 0,
+                };
+                newComments.push(comment);
               }
-              return [...prevComments, ...newComments];
-            });
-            
-            const newLikes = prev.likes + likesIncrease;
-            const newRetweets = prev.retweets + retweetsIncrease;
-            const newViews = prev.views + Math.floor(Math.random() * 500000) + 400000; // 400000-899999
-            
-            return {
-              ...prev,
-              likes: newLikes,
-              retweets: newRetweets,
-              comments: prev.comments + commentIncrease,
-              views: newViews,
-            };
+            }
+            return [...prevComments, ...newComments];
+          });
+          // Message increment: world record
+          if (Math.random() < 0.99) {
+            incrementMessage(Math.floor(Math.random() * 60) + 40); // 40-99
+          }
+          const newLikes = prev.likes + likesIncrease;
+          const newRetweets = prev.retweets + retweetsIncrease;
+          const newViews = prev.views + Math.floor(Math.random() * 500000) + 400000; // 400000-899999
+          return {
+            ...prev,
+            likes: newLikes,
+            retweets: newRetweets,
+            comments: prev.comments + commentIncrease,
+            views: newViews,
+          };
         });
       }, 15);
     }, 300000));

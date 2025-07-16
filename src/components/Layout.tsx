@@ -10,20 +10,27 @@ interface LayoutProps {
 
 interface NotificationContextType {
   notificationCount: number;
+  messageCount: number;
   incrementNotification: (count?: number) => void;
   setNotificationCount: (count: number) => void;
+  incrementMessage: (count?: number) => void;
+  setMessageCount: (count: number) => void;
 }
 
 const NotificationContext = createContext<NotificationContextType>({
   notificationCount: 0,
+  messageCount: 0,
   incrementNotification: () => {},
-  setNotificationCount: () => {}
+  setNotificationCount: () => {},
+  incrementMessage: () => {},
+  setMessageCount: () => {}
 });
 
 export const useNotifications = () => useContext(NotificationContext);
 
 export default function Layout({ children }: LayoutProps) {
   const [notificationCount, setNotificationCount] = useState(0);
+  const [messageCount, setMessageCount] = useState(0);
 
   const incrementNotification = (count: number = 1) => {
     setNotificationCount(prev => Math.min(prev + count, 9999)); // Cap at 9999 to avoid overflow
@@ -33,13 +40,28 @@ export default function Layout({ children }: LayoutProps) {
     setNotificationCount(Math.min(count, 9999)); // Cap at 9999 to avoid overflow
   };
 
+  const incrementMessage = (count: number = 1) => {
+    setMessageCount(prev => Math.min(prev + count, 1000)); // Cap at 1000 to show 999+
+  };
+
+  const setMessageCountDirect = (count: number) => {
+    setMessageCount(Math.min(count, 1000)); // Cap at 1000 to show 999+
+  };
+
   return (
-    <NotificationContext.Provider value={{ notificationCount, incrementNotification, setNotificationCount: setNotificationCountDirect }}>
+    <NotificationContext.Provider value={{ 
+      notificationCount, 
+      messageCount,
+      incrementNotification, 
+      setNotificationCount: setNotificationCountDirect,
+      incrementMessage,
+      setMessageCount: setMessageCountDirect
+    }}>
       <div className="min-h-screen bg-black text-white">
         <div className="max-w-screen-xl mx-auto flex">
           {/* Left Sidebar */}
           <div className="w-64 xl:w-80 fixed h-full">
-            <Sidebar notificationCount={notificationCount} />
+            <Sidebar notificationCount={notificationCount} messageCount={messageCount} />
           </div>
           
           {/* Main Content - Made wider */}
