@@ -77,4 +77,10 @@ This project is for educational and entertainment purposes only. Please ensure c
 
 ---
 
+## Forking Guidelines
+- Change colors/fonts/icons so it’s unmistakably *not* an X/Twitter product.  
+- Keep the “Not affiliated” disclaimer visible.  
+- Don’t use real user data or live Twitter APIs without respecting their TOS.  
+
+
 **Remember**: Real social media success comes from authentic content, genuine engagement, and providing value to your audience. This simulator is just for fun! 🎉
